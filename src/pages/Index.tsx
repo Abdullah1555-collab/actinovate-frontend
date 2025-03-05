@@ -1,14 +1,12 @@
-
 import React, { useState, useEffect } from 'react';
-import { Link, Routes, Route } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { 
   LayoutDashboard, 
   Search, 
   TrendingUp, 
   Briefcase,
   ChevronLeft,
-  Menu,
-  Plus 
+  Menu
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 

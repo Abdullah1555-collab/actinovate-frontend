@@ -1,686 +1,805 @@
 
-import React, { useState, useEffect } from 'react';
-import { Search, ArrowUpDown, Download, Filter, Sliders, X, Plus, BellRing } from 'lucide-react';
+import React, { useState } from 'react';
+import { Download, ChevronDown, ChevronUp, Search, SlidersHorizontal, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Select } from '@/components/ui/select';
+import { toast } from 'sonner';
 
 // Mock data for the screener
 const mockStocks = [
-  { symbol: 'AAPL', name: 'Apple Inc.', sector: 'Technology', price: 185.92, marketCap: 2.94, peRatio: 30.5, dividendYield: 0.5, beta: 1.23, volume: '62.3M', change: '+1.23%' },
-  { symbol: 'MSFT', name: 'Microsoft Corporation', sector: 'Technology', price: 328.79, marketCap: 2.44, peRatio: 34.2, dividendYield: 0.8, beta: 0.95, volume: '48.7M', change: '+0.87%' },
-  { symbol: 'GOOGL', name: 'Alphabet Inc.', sector: 'Technology', price: 1450.16, marketCap: 1.84, peRatio: 25.1, dividendYield: 0, beta: 1.08, volume: '35.2M', change: '-0.45%' },
-  { symbol: 'AMZN', name: 'Amazon.com, Inc.', sector: 'Consumer Cyclical', price: 3120.50, marketCap: 1.59, peRatio: 60.8, dividendYield: 0, beta: 1.24, volume: '41.8M', change: '+2.15%' },
-  { symbol: 'TSLA', name: 'Tesla, Inc.', sector: 'Automotive', price: 273.58, marketCap: 0.87, peRatio: 75.2, dividendYield: 0, beta: 1.76, volume: '58.4M', change: '-1.65%' },
-  { symbol: 'NVDA', name: 'NVIDIA Corporation', sector: 'Technology', price: 435.10, marketCap: 1.07, peRatio: 62.1, dividendYield: 0.1, beta: 1.54, volume: '45.9M', change: '+3.45%' },
-  { symbol: 'META', name: 'Meta Platforms, Inc.', sector: 'Technology', price: 297.80, marketCap: 0.76, peRatio: 28.4, dividendYield: 0.5, beta: 1.31, volume: '32.6M', change: '+0.63%' },
-  { symbol: 'WMT', name: 'Walmart Inc.', sector: 'Consumer Defensive', price: 156.72, marketCap: 0.42, peRatio: 26.5, dividendYield: 1.4, beta: 0.64, volume: '18.3M', change: '+0.25%' },
-  { symbol: 'JNJ', name: 'Johnson & Johnson', sector: 'Healthcare', price: 167.15, marketCap: 0.40, peRatio: 15.2, dividendYield: 3.0, beta: 0.57, volume: '12.7M', change: '-0.32%' },
-  { symbol: 'JPM', name: 'JPMorgan Chase & Co.', sector: 'Financial Services', price: 144.23, marketCap: 0.42, peRatio: 11.7, dividendYield: 2.5, beta: 1.12, volume: '15.6M', change: '+1.05%' },
-  { symbol: 'V', name: 'Visa Inc.', sector: 'Financial Services', price: 233.45, marketCap: 0.49, peRatio: 33.8, dividendYield: 0.7, beta: 0.96, volume: '11.2M', change: '+0.41%' },
-  { symbol: 'PG', name: 'Procter & Gamble Co.', sector: 'Consumer Defensive', price: 156.32, marketCap: 0.37, peRatio: 25.6, dividendYield: 2.4, beta: 0.42, volume: '9.8M', change: '+0.18%' },
-  { symbol: 'UNH', name: 'UnitedHealth Group Inc.', sector: 'Healthcare', price: 456.78, marketCap: 0.43, peRatio: 21.3, dividendYield: 1.3, beta: 0.68, volume: '8.5M', change: '+0.73%' },
-  { symbol: 'HD', name: 'Home Depot Inc.', sector: 'Consumer Cyclical', price: 325.89, marketCap: 0.33, peRatio: 23.7, dividendYield: 2.3, beta: 1.05, volume: '7.9M', change: '-0.53%' },
-  { symbol: 'BAC', name: 'Bank of America Corp.', sector: 'Financial Services', price: 34.56, marketCap: 0.27, peRatio: 11.2, dividendYield: 2.7, beta: 1.38, volume: '14.3M', change: '+0.87%' },
+  {
+    symbol: "AAPL",
+    name: "Apple Inc.",
+    sector: "Technology",
+    industry: "Consumer Electronics",
+    price: 185.92,
+    change: 2.45,
+    changePercent: 1.32,
+    marketCap: 2980000000000,
+    pe: 31.42,
+    eps: 5.91,
+    dividendYield: 0.48,
+    volume: 56780000,
+    beta: 1.28,
+    founded: 1976,
+    netProfit: 99580000000,
+    netProfitPercentage: 25.3,
+    revenue: 394330000000,
+    sma10: 183.56,
+    sma20: 179.43,
+    sma50: 175.29,
+    sma200: 168.77,
+    rsi: 68.2,
+    relativeVolume: 1.2,
+    psRatio: 8.1,
+    pbRatio: 46.2,
+    pcfRatio: 28.4,
+    momentum: 6.5
+  },
+  {
+    symbol: "MSFT",
+    name: "Microsoft Corporation",
+    sector: "Technology",
+    industry: "Software",
+    price: 328.79,
+    change: 4.28,
+    changePercent: 1.31,
+    marketCap: 2450000000000,
+    pe: 35.21,
+    eps: 9.34,
+    dividendYield: 0.73,
+    volume: 22340000,
+    beta: 0.92,
+    founded: 1975,
+    netProfit: 72360000000,
+    netProfitPercentage: 36.8,
+    revenue: 196520000000,
+    sma10: 326.78,
+    sma20: 319.45,
+    sma50: 312.37,
+    sma200: 287.89,
+    rsi: 71.4,
+    relativeVolume: 0.95,
+    psRatio: 12.5,
+    pbRatio: 15.8,
+    pcfRatio: 26.2,
+    momentum: 8.3
+  },
+  {
+    symbol: "GOOGL",
+    name: "Alphabet Inc.",
+    sector: "Technology",
+    industry: "Internet Content & Information",
+    price: 1450.16,
+    change: -5.84,
+    changePercent: -0.41,
+    marketCap: 1840000000000,
+    pe: 25.68,
+    eps: 56.47,
+    dividendYield: 0,
+    volume: 14560000,
+    beta: 1.06,
+    founded: 1998,
+    netProfit: 73800000000,
+    netProfitPercentage: 21.6,
+    revenue: 341820000000,
+    sma10: 1448.32,
+    sma20: 1417.89,
+    sma50: 1389.45,
+    sma200: 1298.76,
+    rsi: 57.8,
+    relativeVolume: 0.87,
+    psRatio: 5.4,
+    pbRatio: 6.3,
+    pcfRatio: 17.9,
+    momentum: 4.2
+  },
+  {
+    symbol: "AMZN",
+    name: "Amazon.com, Inc.",
+    sector: "Consumer Cyclical",
+    industry: "Internet Retail",
+    price: 3120.50,
+    change: 35.21,
+    changePercent: 1.14,
+    marketCap: 1560000000000,
+    pe: 76.11,
+    eps: 41.00,
+    dividendYield: 0,
+    volume: 17890000,
+    beta: 1.19,
+    founded: 1994,
+    netProfit: 26263000000,
+    netProfitPercentage: 5.1,
+    revenue: 513983000000,
+    sma10: 3087.67,
+    sma20: 3002.45,
+    sma50: 2945.78,
+    sma200: 2738.91,
+    rsi: 63.5,
+    relativeVolume: 1.12,
+    psRatio: 3.0,
+    pbRatio: 12.7,
+    pcfRatio: 24.6,
+    momentum: 5.8
+  },
+  {
+    symbol: "NVDA",
+    name: "NVIDIA Corporation",
+    sector: "Technology",
+    industry: "Semiconductors",
+    price: 435.10,
+    change: 15.45,
+    changePercent: 3.68,
+    marketCap: 1070000000000,
+    pe: 112.83,
+    eps: 3.86,
+    dividendYield: 0.07,
+    volume: 42560000,
+    beta: 1.74,
+    founded: 1993,
+    netProfit: 9752000000,
+    netProfitPercentage: 32.8,
+    revenue: 29704000000,
+    sma10: 412.34,
+    sma20: 389.67,
+    sma50: 367.21,
+    sma200: 289.43,
+    rsi: 78.4,
+    relativeVolume: 1.34,
+    psRatio: 36.0,
+    pbRatio: 34.5,
+    pcfRatio: 87.6,
+    momentum: 15.7
+  }
 ];
 
-// Filter options
-const sectors = ['All', 'Technology', 'Financial Services', 'Healthcare', 'Consumer Cyclical', 'Consumer Defensive', 'Automotive'];
-const industries = ['All', 'Software', 'Hardware', 'Semiconductors', 'Banking', 'Insurance', 'Pharmaceuticals', 'Retail', 'Automotive', 'Energy'];
-const marketCapOptions = ['All', '>$1T', '$500B-$1T', '$100B-$500B', '$10B-$100B', '<$10B'];
-const peRatioOptions = ['All', '<10', '10-20', '20-50', '>50'];
-const dividendOptions = ['All', 'No Dividend', '0-1%', '1-2%', '2-3%', '>3%'];
+// Sectors
+const sectors = [
+  'All',
+  'Technology',
+  'Healthcare',
+  'Financial Services',
+  'Consumer Cyclical',
+  'Industrials',
+  'Communication Services',
+  'Consumer Defensive',
+  'Energy',
+  'Basic Materials',
+  'Real Estate',
+  'Utilities'
+];
 
-const Screener: React.FC = () => {
-  const [filterOpen, setFilterOpen] = useState(true);
+// Industries
+const industries = [
+  'All',
+  'Software',
+  'Semiconductors',
+  'Consumer Electronics',
+  'Internet Content & Information',
+  'Internet Retail',
+  'Biotechnology',
+  'Banks',
+  'Insurance',
+  'Aerospace & Defense',
+  'Telecom'
+];
+
+const Screener = () => {
+  const [stocks, setStocks] = useState(mockStocks);
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedSector, setSelectedSector] = useState('All');
-  const [selectedIndustry, setSelectedIndustry] = useState('All');
-  const [minPrice, setMinPrice] = useState('');
-  const [maxPrice, setMaxPrice] = useState('');
-  const [selectedMarketCap, setSelectedMarketCap] = useState('All');
-  const [minPE, setMinPE] = useState('');
-  const [maxPE, setMaxPE] = useState('');
-  const [minDividend, setMinDividend] = useState('');
-  const [maxDividend, setMaxDividend] = useState('');
-  const [foundedYear, setFoundedYear] = useState('');
-  const [netProfit, setNetProfit] = useState('');
-  const [netProfitPercent, setNetProfitPercent] = useState('');
-  const [revenue, setRevenue] = useState('');
-  const [basicEPS, setBasicEPS] = useState('');
-  const [dilutedEPS, setDilutedEPS] = useState('');
-  const [sma10, setSma10] = useState('');
-  const [sma20, setSma20] = useState('');
-  const [sma50, setSma50] = useState('');
-  const [sma200, setSma200] = useState('');
-  const [beta1Year, setBeta1Year] = useState('');
-  const [beta5Year, setBeta5Year] = useState('');
-  const [relativeVolume, setRelativeVolume] = useState('');
-  const [psRatio, setPsRatio] = useState('');
-  const [pbRatio, setPbRatio] = useState('');
-  const [pcfRatio, setPcfRatio] = useState('');
-  const [rsi, setRsi] = useState('');
-  const [momentum, setMomentum] = useState('');
+  const [filterVisible, setFilterVisible] = useState(true);
+  const [sortConfig, setSortConfig] = useState({
+    key: 'marketCap',
+    direction: 'desc'
+  });
   
-  const [sortConfig, setSortConfig] = useState({ key: 'symbol', direction: 'ascending' });
-  const [filteredStocks, setFilteredStocks] = useState(mockStocks);
-
-  // Filter and sort stocks based on criteria
-  useEffect(() => {
-    let filtered = [...mockStocks];
-
-    // Apply search filter
-    if (searchTerm) {
-      filtered = filtered.filter(stock => 
-        stock.symbol.toLowerCase().includes(searchTerm.toLowerCase()) || 
-        stock.name.toLowerCase().includes(searchTerm.toLowerCase())
+  // Filter states
+  const [filters, setFilters] = useState({
+    ticker: '',
+    minPrice: '',
+    maxPrice: '',
+    sector: 'All',
+    industry: '',
+    foundedYear: '',
+    netProfit: '',
+    netProfitPercentage: '',
+    revenue: '',
+    pe: '',
+    dividendYield: '',
+    basicEPS: '',
+    dilutedEPS: '',
+    sma10: '',
+    sma20: '',
+    sma50: '',
+    sma200: '',
+    beta1Year: '',
+    beta5Year: '',
+    relativeVolume: '',
+    psRatio: '',
+    pbRatio: '',
+    pcfRatio: '',
+    rsi: '',
+    momentum: ''
+  });
+  
+  const toggleFilter = () => {
+    setFilterVisible(!filterVisible);
+  };
+  
+  const handleFilterChange = (e) => {
+    const { name, value } = e.target;
+    setFilters({
+      ...filters,
+      [name]: value
+    });
+  };
+  
+  const resetFilters = () => {
+    setFilters({
+      ticker: '',
+      minPrice: '',
+      maxPrice: '',
+      sector: 'All',
+      industry: '',
+      foundedYear: '',
+      netProfit: '',
+      netProfitPercentage: '',
+      revenue: '',
+      pe: '',
+      dividendYield: '',
+      basicEPS: '',
+      dilutedEPS: '',
+      sma10: '',
+      sma20: '',
+      sma50: '',
+      sma200: '',
+      beta1Year: '',
+      beta5Year: '',
+      relativeVolume: '',
+      psRatio: '',
+      pbRatio: '',
+      pcfRatio: '',
+      rsi: '',
+      momentum: ''
+    });
+    
+    setStocks(mockStocks);
+    toast.success("Filters have been reset");
+  };
+  
+  const applyFilters = () => {
+    let filteredStocks = [...mockStocks];
+    
+    // Apply ticker filter
+    if (filters.ticker) {
+      filteredStocks = filteredStocks.filter(stock => 
+        stock.symbol.toLowerCase().includes(filters.ticker.toLowerCase())
       );
     }
-
+    
+    // Apply price filters
+    if (filters.minPrice) {
+      filteredStocks = filteredStocks.filter(stock => 
+        stock.price >= parseFloat(filters.minPrice)
+      );
+    }
+    
+    if (filters.maxPrice) {
+      filteredStocks = filteredStocks.filter(stock => 
+        stock.price <= parseFloat(filters.maxPrice)
+      );
+    }
+    
     // Apply sector filter
-    if (selectedSector !== 'All') {
-      filtered = filtered.filter(stock => stock.sector === selectedSector);
-    }
-
-    // Apply price range filter
-    if (minPrice) {
-      filtered = filtered.filter(stock => stock.price >= parseFloat(minPrice));
+    if (filters.sector && filters.sector !== 'All') {
+      filteredStocks = filteredStocks.filter(stock => 
+        stock.sector === filters.sector
+      );
     }
     
-    if (maxPrice) {
-      filtered = filtered.filter(stock => stock.price <= parseFloat(maxPrice));
-    }
-
-    // Apply market cap filter
-    if (selectedMarketCap !== 'All') {
-      filtered = filtered.filter(stock => {
-        const cap = stock.marketCap;
-        switch (selectedMarketCap) {
-          case '>$1T': return cap >= 1;
-          case '$500B-$1T': return cap >= 0.5 && cap < 1;
-          case '$100B-$500B': return cap >= 0.1 && cap < 0.5;
-          case '$10B-$100B': return cap >= 0.01 && cap < 0.1;
-          case '<$10B': return cap < 0.01;
-          default: return true;
-        }
-      });
-    }
-
-    // Apply P/E ratio filter
-    if (minPE) {
-      filtered = filtered.filter(stock => stock.peRatio >= parseFloat(minPE));
+    // Apply industry filter
+    if (filters.industry && filters.industry !== 'All') {
+      filteredStocks = filteredStocks.filter(stock => 
+        stock.industry.toLowerCase().includes(filters.industry.toLowerCase())
+      );
     }
     
-    if (maxPE) {
-      filtered = filtered.filter(stock => stock.peRatio <= parseFloat(maxPE));
-    }
-
-    // Apply dividend yield filter
-    if (minDividend) {
-      filtered = filtered.filter(stock => stock.dividendYield >= parseFloat(minDividend));
+    // Apply more filters here as needed...
+    
+    setStocks(filteredStocks);
+    toast.success(`Found ${filteredStocks.length} stocks matching your criteria`);
+  };
+  
+  const handleSort = (key) => {
+    let direction = 'asc';
+    if (sortConfig.key === key && sortConfig.direction === 'asc') {
+      direction = 'desc';
     }
     
-    if (maxDividend) {
-      filtered = filtered.filter(stock => stock.dividendYield <= parseFloat(maxDividend));
-    }
-
-    // Apply sorting
-    filtered.sort((a, b) => {
-      if (a[sortConfig.key] < b[sortConfig.key]) {
-        return sortConfig.direction === 'ascending' ? -1 : 1;
+    setSortConfig({ key, direction });
+    
+    const sortedStocks = [...stocks].sort((a, b) => {
+      if (a[key] < b[key]) {
+        return direction === 'asc' ? -1 : 1;
       }
-      if (a[sortConfig.key] > b[sortConfig.key]) {
-        return sortConfig.direction === 'ascending' ? 1 : -1;
+      if (a[key] > b[key]) {
+        return direction === 'asc' ? 1 : -1;
       }
       return 0;
     });
-
-    setFilteredStocks(filtered);
-  }, [searchTerm, selectedSector, minPrice, maxPrice, selectedMarketCap, minPE, maxPE, minDividend, maxDividend, sortConfig]);
-
-  // Handle sort
-  const requestSort = (key) => {
-    let direction = 'ascending';
-    if (sortConfig.key === key && sortConfig.direction === 'ascending') {
-      direction = 'descending';
-    }
-    setSortConfig({ key, direction });
-  };
-
-  // Export to CSV
-  const exportToCSV = () => {
-    const headers = ['Symbol', 'Name', 'Sector', 'Price', 'Market Cap (T)', 'P/E Ratio', 'Dividend Yield (%)', 'Beta', 'Volume', 'Change'];
-    const data = filteredStocks.map(stock => [
-      stock.symbol,
-      stock.name,
-      stock.sector,
-      stock.price,
-      stock.marketCap,
-      stock.peRatio,
-      stock.dividendYield,
-      stock.beta,
-      stock.volume,
-      stock.change
-    ]);
     
-    const csvContent = [
-      headers.join(','),
-      ...data.map(row => row.join(','))
-    ].join('\n');
-    
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = 'stock_screener_results.csv';
-    link.click();
+    setStocks(sortedStocks);
   };
   
-  // Format number as currency
-  const formatCurrency = (value) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 2
-    }).format(value);
+  const getSortIcon = (key) => {
+    if (sortConfig.key !== key) {
+      return <ChevronDown className="sort-icon h-4 w-4 opacity-50" />;
+    }
+    
+    return sortConfig.direction === 'asc' 
+      ? <ChevronUp className="sort-icon h-4 w-4" />
+      : <ChevronDown className="sort-icon h-4 w-4" />;
   };
-
-  // Reset all filters
-  const resetFilters = () => {
-    setSearchTerm('');
-    setSelectedSector('All');
-    setSelectedIndustry('All');
-    setMinPrice('');
-    setMaxPrice('');
-    setSelectedMarketCap('All');
-    setMinPE('');
-    setMaxPE('');
-    setMinDividend('');
-    setMaxDividend('');
-    setFoundedYear('');
-    setNetProfit('');
-    setNetProfitPercent('');
-    setRevenue('');
-    setBasicEPS('');
-    setDilutedEPS('');
-    setSma10('');
-    setSma20('');
-    setSma50('');
-    setSma200('');
-    setBeta1Year('');
-    setBeta5Year('');
-    setRelativeVolume('');
-    setPsRatio('');
-    setPbRatio('');
-    setPcfRatio('');
-    setRsi('');
-    setMomentum('');
+  
+  const exportToCSV = () => {
+    // Create CSV content
+    const headers = ['Symbol', 'Name', 'Sector', 'Price', 'Change', 'Change %', 'Market Cap', 'P/E', 'Dividend Yield'];
+    const csvContent = [
+      headers.join(','),
+      ...stocks.map(stock => [
+        stock.symbol,
+        `"${stock.name}"`,
+        `"${stock.sector}"`,
+        stock.price,
+        stock.change,
+        stock.changePercent,
+        stock.marketCap,
+        stock.pe,
+        stock.dividendYield
+      ].join(','))
+    ].join('\n');
+    
+    // Create a blob and download
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.setAttribute('href', url);
+    link.setAttribute('download', 'stock_screener_results.csv');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    toast.success('CSV file exported successfully');
   };
-
+  
+  const formatMarketCap = (value) => {
+    if (value >= 1000000000000) {
+      return `$${(value / 1000000000000).toFixed(2)}T`;
+    } else if (value >= 1000000000) {
+      return `$${(value / 1000000000).toFixed(2)}B`;
+    } else if (value >= 1000000) {
+      return `$${(value / 1000000).toFixed(2)}M`;
+    } else {
+      return `$${value.toLocaleString()}`;
+    }
+  };
+  
   return (
     <div className="screener-page">
       <div className="header-section">
         <div>
           <h1 className="page-title">Stock Screener</h1>
-          <p className="subtitle">Filter and analyze stocks based on various metrics</p>
+          <p className="subtitle">Find and filter stocks based on your criteria</p>
         </div>
-        <div className="flex gap-2">
-          <Button onClick={() => setFilterOpen(!filterOpen)} variant="outline" className="mobile-filter-toggle">
-            <Filter size={18} className="mr-2" />
-            <span>Filters</span>
+        <div className="flex items-center gap-2">
+          <Button variant="outline" onClick={toggleFilter} className="mobile-filter-toggle">
+            <SlidersHorizontal className="h-4 w-4 mr-2" />
+            Filters
           </Button>
-          <Button onClick={exportToCSV} className="export-btn">
-            <Download size={18} />
-            <span>Export</span>
+          <Button variant="outline" onClick={exportToCSV} className="export-btn">
+            <Download className="h-4 w-4 mr-2" />
+            Export
           </Button>
         </div>
       </div>
-
+      
       <div className="screener-layout">
-        {/* Filter Sidebar */}
-        <div className={`filter-sidebar ${filterOpen ? 'open' : 'closed'}`}>
+        <div className={`filter-sidebar ${filterVisible ? 'open' : 'closed'}`}>
           <div className="filter-sidebar-header">
-            <h3 className="text-lg font-semibold">Filters</h3>
-            <div className="flex gap-2">
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                onClick={resetFilters}
-                className="text-muted-foreground"
-              >
-                Reset
-              </Button>
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                onClick={() => setFilterOpen(false)}
-                className="lg:hidden"
-              >
-                <X size={18} />
-              </Button>
-            </div>
+            <h3 className="text-sm font-medium">Filters</h3>
+            <Button variant="ghost" size="sm" className="h-8 w-8 p-0" onClick={toggleFilter}>
+              <X className="h-4 w-4" />
+            </Button>
           </div>
-
+          
           <div className="filter-sidebar-content">
             <div className="filter-group">
               <label className="filter-label">Search Ticker:</label>
-              <Input
-                type="text"
-                placeholder="Enter Ticker Symbol"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="filter-input"
+              <Input 
+                className="filter-input" 
+                placeholder="Enter Ticker Symbol" 
+                name="ticker"
+                value={filters.ticker}
+                onChange={handleFilterChange}
               />
             </div>
-
+            
             <div className="filter-group">
               <label className="filter-label">Price Range:</label>
               <div className="filter-row">
-                <Input
+                <Input 
+                  className="filter-input-half" 
+                  placeholder="Min Price" 
+                  name="minPrice"
+                  value={filters.minPrice}
+                  onChange={handleFilterChange}
                   type="number"
-                  placeholder="Min Price"
-                  value={minPrice}
-                  onChange={(e) => setMinPrice(e.target.value)}
-                  className="filter-input-half"
                 />
-                <Input
+                <Input 
+                  className="filter-input-half" 
+                  placeholder="Max Price" 
+                  name="maxPrice"
+                  value={filters.maxPrice}
+                  onChange={handleFilterChange}
                   type="number"
-                  placeholder="Max Price"
-                  value={maxPrice}
-                  onChange={(e) => setMaxPrice(e.target.value)}
-                  className="filter-input-half"
                 />
               </div>
             </div>
-
+            
             <div className="filter-group">
               <label className="filter-label">Sector:</label>
               <select 
-                className="filter-select"
-                value={selectedSector}
-                onChange={(e) => setSelectedSector(e.target.value)}
+                className="filter-select" 
+                name="sector"
+                value={filters.sector}
+                onChange={handleFilterChange}
               >
-                {sectors.map(sector => (
+                {sectors.map((sector) => (
                   <option key={sector} value={sector}>{sector}</option>
                 ))}
               </select>
             </div>
-
+            
             <div className="filter-group">
               <label className="filter-label">Industry:</label>
-              <select 
-                className="filter-select"
-                value={selectedIndustry}
-                onChange={(e) => setSelectedIndustry(e.target.value)}
-              >
-                {industries.map(industry => (
-                  <option key={industry} value={industry}>{industry}</option>
-                ))}
-              </select>
+              <Input 
+                className="filter-input" 
+                placeholder="Enter Industry" 
+                name="industry"
+                value={filters.industry}
+                onChange={handleFilterChange}
+              />
             </div>
-
+            
             <div className="filter-group">
               <label className="filter-label">Founded Year:</label>
-              <Input
+              <Input 
+                className="filter-input" 
+                placeholder="Enter Founded Year" 
+                name="foundedYear"
+                value={filters.foundedYear}
+                onChange={handleFilterChange}
                 type="number"
-                placeholder="Enter Founded Year"
-                value={foundedYear}
-                onChange={(e) => setFoundedYear(e.target.value)}
-                className="filter-input"
               />
             </div>
-
-            <div className="filter-group">
-              <label className="filter-label">Market Cap:</label>
-              <select 
-                className="filter-select"
-                value={selectedMarketCap}
-                onChange={(e) => setSelectedMarketCap(e.target.value)}
-              >
-                {marketCapOptions.map(option => (
-                  <option key={option} value={option}>{option}</option>
-                ))}
-              </select>
-            </div>
-
+            
             <div className="filter-group">
               <label className="filter-label">Net Profit:</label>
-              <Input
-                type="text"
-                placeholder="Enter Net Profit"
-                value={netProfit}
-                onChange={(e) => setNetProfit(e.target.value)}
-                className="filter-input"
+              <Input 
+                className="filter-input" 
+                placeholder="Enter Net Profit" 
+                name="netProfit"
+                value={filters.netProfit}
+                onChange={handleFilterChange}
               />
             </div>
-
+            
             <div className="filter-group">
               <label className="filter-label">Net Profit (%):</label>
-              <Input
-                type="text"
-                placeholder="Enter Net Profit %"
-                value={netProfitPercent}
-                onChange={(e) => setNetProfitPercent(e.target.value)}
-                className="filter-input"
+              <Input 
+                className="filter-input" 
+                placeholder="Enter Net Profit %" 
+                name="netProfitPercentage"
+                value={filters.netProfitPercentage}
+                onChange={handleFilterChange}
               />
             </div>
-
+            
             <div className="filter-group">
               <label className="filter-label">Revenue:</label>
-              <Input
-                type="text"
-                placeholder="Enter Revenue"
-                value={revenue}
-                onChange={(e) => setRevenue(e.target.value)}
-                className="filter-input"
+              <Input 
+                className="filter-input" 
+                placeholder="Enter Revenue" 
+                name="revenue"
+                value={filters.revenue}
+                onChange={handleFilterChange}
               />
             </div>
-
+            
             <div className="filter-group">
               <label className="filter-label">Price/Earning (P/E):</label>
-              <div className="filter-row">
-                <Input
-                  type="number"
-                  placeholder="Min P/E"
-                  value={minPE}
-                  onChange={(e) => setMinPE(e.target.value)}
-                  className="filter-input-half"
-                />
-                <Input
-                  type="number"
-                  placeholder="Max P/E"
-                  value={maxPE}
-                  onChange={(e) => setMaxPE(e.target.value)}
-                  className="filter-input-half"
-                />
-              </div>
+              <Input 
+                className="filter-input" 
+                placeholder="Enter P/E" 
+                name="pe"
+                value={filters.pe}
+                onChange={handleFilterChange}
+              />
             </div>
-
+            
             <div className="filter-group">
               <label className="filter-label">Dividend Yield:</label>
-              <div className="filter-row">
-                <Input
-                  type="number"
-                  placeholder="Min Yield"
-                  value={minDividend}
-                  onChange={(e) => setMinDividend(e.target.value)}
-                  className="filter-input-half"
-                />
-                <Input
-                  type="number"
-                  placeholder="Max Yield"
-                  value={maxDividend}
-                  onChange={(e) => setMaxDividend(e.target.value)}
-                  className="filter-input-half"
-                />
-              </div>
+              <Input 
+                className="filter-input" 
+                placeholder="Enter Dividend Yield" 
+                name="dividendYield"
+                value={filters.dividendYield}
+                onChange={handleFilterChange}
+              />
             </div>
-
+            
             <div className="filter-group">
               <label className="filter-label">Basic EPS:</label>
-              <Input
-                type="text"
-                placeholder="Enter Basic EPS"
-                value={basicEPS}
-                onChange={(e) => setBasicEPS(e.target.value)}
-                className="filter-input"
+              <Input 
+                className="filter-input" 
+                placeholder="Enter Basic EPS" 
+                name="basicEPS"
+                value={filters.basicEPS}
+                onChange={handleFilterChange}
               />
             </div>
-
+            
             <div className="filter-group">
               <label className="filter-label">Diluted EPS:</label>
-              <Input
-                type="text"
-                placeholder="Enter Diluted EPS"
-                value={dilutedEPS}
-                onChange={(e) => setDilutedEPS(e.target.value)}
-                className="filter-input"
+              <Input 
+                className="filter-input" 
+                placeholder="Enter Diluted EPS" 
+                name="dilutedEPS"
+                value={filters.dilutedEPS}
+                onChange={handleFilterChange}
               />
             </div>
-
+            
             <div className="filter-group">
               <label className="filter-label">SMA (10):</label>
-              <Input
-                type="text"
-                placeholder="Enter SMA (10)"
-                value={sma10}
-                onChange={(e) => setSma10(e.target.value)}
-                className="filter-input"
+              <Input 
+                className="filter-input" 
+                placeholder="Enter SMA (10)" 
+                name="sma10"
+                value={filters.sma10}
+                onChange={handleFilterChange}
               />
             </div>
-
+            
             <div className="filter-group">
               <label className="filter-label">SMA (20):</label>
-              <Input
-                type="text"
-                placeholder="Enter SMA (20)"
-                value={sma20}
-                onChange={(e) => setSma20(e.target.value)}
-                className="filter-input"
+              <Input 
+                className="filter-input" 
+                placeholder="Enter SMA (20)" 
+                name="sma20"
+                value={filters.sma20}
+                onChange={handleFilterChange}
               />
             </div>
-
+            
             <div className="filter-group">
               <label className="filter-label">SMA (50):</label>
-              <Input
-                type="text"
-                placeholder="Enter SMA (50)"
-                value={sma50}
-                onChange={(e) => setSma50(e.target.value)}
-                className="filter-input"
+              <Input 
+                className="filter-input" 
+                placeholder="Enter SMA (50)" 
+                name="sma50"
+                value={filters.sma50}
+                onChange={handleFilterChange}
               />
             </div>
-
+            
             <div className="filter-group">
               <label className="filter-label">SMA (200):</label>
-              <Input
-                type="text"
-                placeholder="Enter SMA (200)"
-                value={sma200}
-                onChange={(e) => setSma200(e.target.value)}
-                className="filter-input"
+              <Input 
+                className="filter-input" 
+                placeholder="Enter SMA (200)" 
+                name="sma200"
+                value={filters.sma200}
+                onChange={handleFilterChange}
               />
             </div>
-
+            
             <div className="filter-group">
               <label className="filter-label">Beta (1 Year):</label>
-              <Input
-                type="text"
-                placeholder="Enter Beta (1 Year)"
-                value={beta1Year}
-                onChange={(e) => setBeta1Year(e.target.value)}
-                className="filter-input"
+              <Input 
+                className="filter-input" 
+                placeholder="Enter Beta (1 Year)" 
+                name="beta1Year"
+                value={filters.beta1Year}
+                onChange={handleFilterChange}
               />
             </div>
-
+            
             <div className="filter-group">
               <label className="filter-label">Beta (5 Year):</label>
-              <Input
-                type="text"
-                placeholder="Enter Beta (5 Year)"
-                value={beta5Year}
-                onChange={(e) => setBeta5Year(e.target.value)}
-                className="filter-input"
+              <Input 
+                className="filter-input" 
+                placeholder="Enter Beta (5 Year)" 
+                name="beta5Year"
+                value={filters.beta5Year}
+                onChange={handleFilterChange}
               />
             </div>
-
+            
             <div className="filter-group">
               <label className="filter-label">Relative Volume:</label>
-              <Input
-                type="text"
-                placeholder="Enter Relative Volume"
-                value={relativeVolume}
-                onChange={(e) => setRelativeVolume(e.target.value)}
-                className="filter-input"
+              <Input 
+                className="filter-input" 
+                placeholder="Enter Relative Volume" 
+                name="relativeVolume"
+                value={filters.relativeVolume}
+                onChange={handleFilterChange}
               />
             </div>
-
+            
             <div className="filter-group">
               <label className="filter-label">P/S Ratio:</label>
-              <Input
-                type="text"
-                placeholder="Enter P/S Ratio"
-                value={psRatio}
-                onChange={(e) => setPsRatio(e.target.value)}
-                className="filter-input"
+              <Input 
+                className="filter-input" 
+                placeholder="Enter P/S Ratio" 
+                name="psRatio"
+                value={filters.psRatio}
+                onChange={handleFilterChange}
               />
             </div>
-
+            
             <div className="filter-group">
               <label className="filter-label">P/B Ratio:</label>
-              <Input
-                type="text"
-                placeholder="Enter P/B Ratio"
-                value={pbRatio}
-                onChange={(e) => setPbRatio(e.target.value)}
-                className="filter-input"
+              <Input 
+                className="filter-input" 
+                placeholder="Enter P/B Ratio" 
+                name="pbRatio"
+                value={filters.pbRatio}
+                onChange={handleFilterChange}
               />
             </div>
-
+            
             <div className="filter-group">
               <label className="filter-label">P/CF Ratio:</label>
-              <Input
-                type="text"
-                placeholder="Enter P/CF Ratio"
-                value={pcfRatio}
-                onChange={(e) => setPcfRatio(e.target.value)}
-                className="filter-input"
+              <Input 
+                className="filter-input" 
+                placeholder="Enter P/CF Ratio" 
+                name="pcfRatio"
+                value={filters.pcfRatio}
+                onChange={handleFilterChange}
               />
             </div>
-
+            
             <div className="filter-group">
               <label className="filter-label">RSI:</label>
-              <Input
-                type="text"
-                placeholder="Enter RSI"
-                value={rsi}
-                onChange={(e) => setRsi(e.target.value)}
-                className="filter-input"
+              <Input 
+                className="filter-input" 
+                placeholder="Enter RSI" 
+                name="rsi"
+                value={filters.rsi}
+                onChange={handleFilterChange}
               />
             </div>
-
+            
             <div className="filter-group">
               <label className="filter-label">Momentum:</label>
-              <Input
-                type="text"
-                placeholder="Enter Momentum"
-                value={momentum}
-                onChange={(e) => setMomentum(e.target.value)}
-                className="filter-input"
+              <Input 
+                className="filter-input" 
+                placeholder="Enter Momentum" 
+                name="momentum"
+                value={filters.momentum}
+                onChange={handleFilterChange}
               />
             </div>
-
-            <Button className="apply-filters-btn w-full mt-4">
-              Apply Filters
-            </Button>
+            
+            <div className="mt-6 space-y-2">
+              <Button onClick={applyFilters} className="apply-filters-btn">
+                Apply Filters
+              </Button>
+              <Button 
+                variant="outline" 
+                className="w-full" 
+                onClick={resetFilters}
+              >
+                Reset
+              </Button>
+            </div>
           </div>
         </div>
-
-        {/* Results */}
+        
         <div className="results-section">
+          <div className="mb-4">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Input 
+                className="pl-10" 
+                placeholder="Search by symbol or company name..." 
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
+          </div>
+          
           <div className="results-header">
-            <span>Showing {filteredStocks.length} stocks</span>
+            <span>{stocks.length} stocks found</span>
           </div>
           
           <div className="table-container">
             <table className="stock-table">
               <thead>
                 <tr>
-                  <th onClick={() => requestSort('symbol')}>
-                    <div className="th-content">
+                  <th onClick={() => handleSort('symbol')}>
+                    <div className="th-content group">
                       Symbol
-                      <ArrowUpDown size={14} className="sort-icon" />
+                      {getSortIcon('symbol')}
                     </div>
                   </th>
-                  <th onClick={() => requestSort('name')}>
-                    <div className="th-content">
+                  <th onClick={() => handleSort('name')}>
+                    <div className="th-content group">
                       Name
-                      <ArrowUpDown size={14} className="sort-icon" />
+                      {getSortIcon('name')}
                     </div>
                   </th>
-                  <th onClick={() => requestSort('sector')}>
-                    <div className="th-content">
+                  <th onClick={() => handleSort('sector')}>
+                    <div className="th-content group">
                       Sector
-                      <ArrowUpDown size={14} className="sort-icon" />
+                      {getSortIcon('sector')}
                     </div>
                   </th>
-                  <th onClick={() => requestSort('price')} className="text-right">
-                    <div className="th-content justify-end">
+                  <th onClick={() => handleSort('price')}>
+                    <div className="th-content justify-end group">
                       Price
-                      <ArrowUpDown size={14} className="sort-icon" />
+                      {getSortIcon('price')}
                     </div>
                   </th>
-                  <th onClick={() => requestSort('marketCap')} className="text-right">
-                    <div className="th-content justify-end">
+                  <th onClick={() => handleSort('changePercent')}>
+                    <div className="th-content justify-end group">
+                      Change %
+                      {getSortIcon('changePercent')}
+                    </div>
+                  </th>
+                  <th onClick={() => handleSort('marketCap')}>
+                    <div className="th-content justify-end group">
                       Market Cap
-                      <ArrowUpDown size={14} className="sort-icon" />
+                      {getSortIcon('marketCap')}
                     </div>
                   </th>
-                  <th onClick={() => requestSort('peRatio')} className="text-right">
-                    <div className="th-content justify-end">
-                      P/E Ratio
-                      <ArrowUpDown size={14} className="sort-icon" />
+                  <th onClick={() => handleSort('pe')}>
+                    <div className="th-content justify-end group">
+                      P/E
+                      {getSortIcon('pe')}
                     </div>
                   </th>
-                  <th onClick={() => requestSort('dividendYield')} className="text-right">
-                    <div className="th-content justify-end">
-                      Dividend
-                      <ArrowUpDown size={14} className="sort-icon" />
-                    </div>
-                  </th>
-                  <th onClick={() => requestSort('beta')} className="text-right">
-                    <div className="th-content justify-end">
-                      Beta
-                      <ArrowUpDown size={14} className="sort-icon" />
-                    </div>
-                  </th>
-                  <th onClick={() => requestSort('volume')} className="text-right">
-                    <div className="th-content justify-end">
-                      Volume
-                      <ArrowUpDown size={14} className="sort-icon" />
-                    </div>
-                  </th>
-                  <th onClick={() => requestSort('change')} className="text-right">
-                    <div className="th-content justify-end">
-                      Change
-                      <ArrowUpDown size={14} className="sort-icon" />
-                    </div>
-                  </th>
-                  <th className="text-center">
-                    <div className="th-content justify-center">
-                      Alert
+                  <th onClick={() => handleSort('dividendYield')}>
+                    <div className="th-content justify-end group">
+                      Div Yield
+                      {getSortIcon('dividendYield')}
                     </div>
                   </th>
                 </tr>
               </thead>
               <tbody>
-                {filteredStocks.map((stock) => (
-                  <tr key={stock.symbol} className="stock-row">
-                    <td className="font-medium">{stock.symbol}</td>
-                    <td>{stock.name}</td>
-                    <td>{stock.sector}</td>
-                    <td className="text-right">{formatCurrency(stock.price)}</td>
-                    <td className="text-right">{stock.marketCap.toFixed(2)}T</td>
-                    <td className="text-right">{stock.peRatio.toFixed(1)}</td>
-                    <td className="text-right">{stock.dividendYield}%</td>
-                    <td className="text-right">{stock.beta}</td>
-                    <td className="text-right">{stock.volume}</td>
-                    <td className={`text-right ${stock.change.startsWith('+') ? 'profit' : 'loss'}`}>
-                      {stock.change}
-                    </td>
-                    <td className="text-center">
-                      <Button variant="ghost" size="sm" className="p-1 h-auto">
-                        <BellRing size={16} />
-                      </Button>
-                    </td>
-                  </tr>
-                ))}
-                {filteredStocks.length === 0 && (
-                  <tr>
-                    <td colSpan={11} className="text-center py-8 text-muted-foreground">
-                      No stocks match your criteria
-                    </td>
-                  </tr>
-                )}
+                {stocks
+                  .filter(stock => 
+                    stock.symbol.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    stock.name.toLowerCase().includes(searchTerm.toLowerCase())
+                  )
+                  .map((stock) => (
+                    <tr key={stock.symbol} className="stock-row">
+                      <td className="font-medium">{stock.symbol}</td>
+                      <td>{stock.name}</td>
+                      <td>{stock.sector}</td>
+                      <td className="text-right">${stock.price.toFixed(2)}</td>
+                      <td className={`text-right ${stock.changePercent >= 0 ? 'profit' : 'loss'}`}>
+                        {stock.changePercent >= 0 ? '+' : ''}{stock.changePercent.toFixed(2)}%
+                      </td>
+                      <td className="text-right">{formatMarketCap(stock.marketCap)}</td>
+                      <td className="text-right">{stock.pe.toFixed(2)}</td>
+                      <td className="text-right">{(stock.dividendYield * 100).toFixed(2)}%</td>
+                    </tr>
+                  ))}
               </tbody>
             </table>
           </div>
