@@ -131,7 +131,7 @@
   }
 
   .stock-table th {
-    @apply text-sm font-medium text-left py-3 px-4 bg-muted text-muted-foreground;
+    @apply text-sm font-medium text-left py-3 px-4 bg-muted text-muted-foreground cursor-pointer hover:bg-muted/80;
   }
 
   .stock-table td {
@@ -152,5 +152,70 @@
 
   .loss {
     @apply text-destructive;
+  }
+
+  /* Screener specific styles */
+  .search-box {
+    @apply relative mb-4;
+  }
+
+  .search-icon {
+    @apply absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground;
+  }
+
+  .search-input {
+    @apply w-full border border-input rounded-md py-2 pl-10 pr-4 bg-background focus:outline-none focus:ring-2 focus:ring-ring focus:border-input;
+  }
+
+  .filters-container {
+    @apply bg-card border border-border rounded-lg p-4 mb-6;
+  }
+
+  .filters-section {
+    @apply space-y-4;
+  }
+
+  .filter-row {
+    @apply flex flex-col md:flex-row gap-4;
+  }
+
+  .multi-filter {
+    @apply grid grid-cols-1 md:grid-cols-2 gap-4;
+  }
+
+  .filter-group {
+    @apply space-y-2;
+  }
+
+  .filter-group label {
+    @apply text-sm font-medium text-muted-foreground;
+  }
+
+  .filter-options {
+    @apply flex flex-wrap gap-2;
+  }
+
+  .results-header {
+    @apply flex justify-between items-center pb-2 text-sm text-muted-foreground;
+  }
+
+  .export-btn {
+    @apply flex items-center gap-2 bg-primary text-primary-foreground px-4 py-2 rounded-md font-medium transition-opacity hover:opacity-90;
+  }
+
+  .th-content {
+    @apply flex items-center gap-1;
+  }
+
+  .justify-end {
+    @apply justify-end;
+  }
+
+  .sort-icon {
+    @apply opacity-40 group-hover:opacity-100;
+  }
+
+  .stock-row {
+    @apply hover:bg-muted/30 transition-colors;
   }
 }
