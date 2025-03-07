@@ -50,6 +50,30 @@ const newsData = [
   }
 ];
 
+// Financial metrics
+const financialData = {
+  marketCap: "$2.89T",
+  peRatio: "28.5",
+  revenue: "$394.3B",
+  nextReportDate: "Apr 25, 2024",
+  dividendYield: "0.53%",
+  weekRange: "$142.65 - $199.62",
+  eps: "$6.42",
+  profitMargin: "25.31%"
+};
+
+// Technical indicators
+const technicalData = {
+  rsi: "56.78",
+  movingAvg50: "$178.45",
+  movingAvg200: "$169.23",
+  beta: "1.32",
+  avgVolume: "57.8M",
+  relativeVolume: "0.95",
+  macd: "1.45",
+  atr: "3.24"
+};
+
 interface StockDetailProps {
   stock: {
     symbol: string;
@@ -62,8 +86,6 @@ interface StockDetailProps {
 }
 
 const StockDetail: React.FC<StockDetailProps> = ({ stock, onBack }) => {
-  const [activeTab, setActiveTab] = useState('chart');
-  
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
@@ -100,15 +122,15 @@ const StockDetail: React.FC<StockDetailProps> = ({ stock, onBack }) => {
         </div>
       </div>
 
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="bg-background border border-input">
+      <Tabs defaultValue="chart" className="w-full">
+        <TabsList className="mb-2">
           <TabsTrigger value="chart">Chart</TabsTrigger>
           <TabsTrigger value="financial">Financial</TabsTrigger>
           <TabsTrigger value="technical">Technical</TabsTrigger>
           <TabsTrigger value="news">News</TabsTrigger>
         </TabsList>
         
-        <TabsContent value="chart" className="mt-4">
+        <TabsContent value="chart">
           <Card>
             <CardContent className="p-6">
               <h3 className="text-xl font-semibold mb-4">5 Year Performance</h3>
@@ -143,91 +165,91 @@ const StockDetail: React.FC<StockDetailProps> = ({ stock, onBack }) => {
           </Card>
         </TabsContent>
         
-        <TabsContent value="financial" className="mt-4">
+        <TabsContent value="financial">
           <Card>
             <CardContent className="p-6">
               <h3 className="text-xl font-semibold mb-4">Financial Information</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <p className="text-muted-foreground mb-1">Market Cap</p>
-                  <p className="text-xl font-semibold">$2.89T</p>
+                  <p className="text-muted-foreground text-sm">Market Cap</p>
+                  <p className="text-xl font-semibold">{financialData.marketCap}</p>
                 </div>
                 <div>
-                  <p className="text-muted-foreground mb-1">P/E Ratio</p>
-                  <p className="text-xl font-semibold">28.5</p>
+                  <p className="text-muted-foreground text-sm">P/E Ratio</p>
+                  <p className="text-xl font-semibold">{financialData.peRatio}</p>
                 </div>
                 <div>
-                  <p className="text-muted-foreground mb-1">Revenue (TTM)</p>
-                  <p className="text-xl font-semibold">$394.3B</p>
+                  <p className="text-muted-foreground text-sm">Revenue (TTM)</p>
+                  <p className="text-xl font-semibold">{financialData.revenue}</p>
                 </div>
                 <div>
-                  <p className="text-muted-foreground mb-1">Next Report Date</p>
-                  <p className="text-xl font-semibold">Apr 25, 2024</p>
+                  <p className="text-muted-foreground text-sm">Next Report Date</p>
+                  <p className="text-xl font-semibold">{financialData.nextReportDate}</p>
                 </div>
                 <div>
-                  <p className="text-muted-foreground mb-1">Dividend Yield</p>
-                  <p className="text-xl font-semibold">0.53%</p>
+                  <p className="text-muted-foreground text-sm">Dividend Yield</p>
+                  <p className="text-xl font-semibold">{financialData.dividendYield}</p>
                 </div>
                 <div>
-                  <p className="text-muted-foreground mb-1">52 Week Range</p>
-                  <p className="text-xl font-semibold">$142.65 - $199.62</p>
+                  <p className="text-muted-foreground text-sm">52 Week Range</p>
+                  <p className="text-xl font-semibold">{financialData.weekRange}</p>
                 </div>
                 <div>
-                  <p className="text-muted-foreground mb-1">EPS (TTM)</p>
-                  <p className="text-xl font-semibold">$6.42</p>
+                  <p className="text-muted-foreground text-sm">EPS (TTM)</p>
+                  <p className="text-xl font-semibold">{financialData.eps}</p>
                 </div>
                 <div>
-                  <p className="text-muted-foreground mb-1">Profit Margin</p>
-                  <p className="text-xl font-semibold">25.31%</p>
+                  <p className="text-muted-foreground text-sm">Profit Margin</p>
+                  <p className="text-xl font-semibold">{financialData.profitMargin}</p>
                 </div>
               </div>
             </CardContent>
           </Card>
         </TabsContent>
         
-        <TabsContent value="technical" className="mt-4">
+        <TabsContent value="technical">
           <Card>
             <CardContent className="p-6">
               <h3 className="text-xl font-semibold mb-4">Technical Indicators</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <p className="text-muted-foreground mb-1">RSI (14)</p>
-                  <p className="text-xl font-semibold">56.78</p>
+                  <p className="text-muted-foreground text-sm">RSI (14)</p>
+                  <p className="text-xl font-semibold">{technicalData.rsi}</p>
                 </div>
                 <div>
-                  <p className="text-muted-foreground mb-1">Moving Average (50)</p>
-                  <p className="text-xl font-semibold">$178.45</p>
+                  <p className="text-muted-foreground text-sm">Moving Average (50)</p>
+                  <p className="text-xl font-semibold">{technicalData.movingAvg50}</p>
                 </div>
                 <div>
-                  <p className="text-muted-foreground mb-1">Moving Average (200)</p>
-                  <p className="text-xl font-semibold">$169.23</p>
+                  <p className="text-muted-foreground text-sm">Moving Average (200)</p>
+                  <p className="text-xl font-semibold">{technicalData.movingAvg200}</p>
                 </div>
                 <div>
-                  <p className="text-muted-foreground mb-1">Beta (5 Year)</p>
-                  <p className="text-xl font-semibold">1.32</p>
+                  <p className="text-muted-foreground text-sm">Beta (5 Year)</p>
+                  <p className="text-xl font-semibold">{technicalData.beta}</p>
                 </div>
                 <div>
-                  <p className="text-muted-foreground mb-1">Average Volume</p>
-                  <p className="text-xl font-semibold">57.8M</p>
+                  <p className="text-muted-foreground text-sm">Average Volume</p>
+                  <p className="text-xl font-semibold">{technicalData.avgVolume}</p>
                 </div>
                 <div>
-                  <p className="text-muted-foreground mb-1">Relative Volume</p>
-                  <p className="text-xl font-semibold">0.95</p>
+                  <p className="text-muted-foreground text-sm">Relative Volume</p>
+                  <p className="text-xl font-semibold">{technicalData.relativeVolume}</p>
                 </div>
                 <div>
-                  <p className="text-muted-foreground mb-1">MACD</p>
-                  <p className="text-xl font-semibold">1.45</p>
+                  <p className="text-muted-foreground text-sm">MACD</p>
+                  <p className="text-xl font-semibold">{technicalData.macd}</p>
                 </div>
                 <div>
-                  <p className="text-muted-foreground mb-1">ATR (14)</p>
-                  <p className="text-xl font-semibold">3.24</p>
+                  <p className="text-muted-foreground text-sm">ATR (14)</p>
+                  <p className="text-xl font-semibold">{technicalData.atr}</p>
                 </div>
               </div>
             </CardContent>
           </Card>
         </TabsContent>
         
-        <TabsContent value="news" className="mt-4">
+        <TabsContent value="news">
           <Card>
             <CardContent className="p-6">
               <h3 className="text-xl font-semibold mb-4">Latest News</h3>
@@ -236,7 +258,7 @@ const StockDetail: React.FC<StockDetailProps> = ({ stock, onBack }) => {
                   <div key={index} className={index < newsData.length - 1 ? "pb-4 border-b border-border" : ""}>
                     <h4 className="font-medium hover:text-primary cursor-pointer">{news.title}</h4>
                     <p className="text-sm text-muted-foreground mb-2">{news.timeAgo}</p>
-                    <p className="text-sm">{news.content}</p>
+                    <p className="text-sm text-muted-foreground">{news.content}</p>
                   </div>
                 ))}
               </div>
