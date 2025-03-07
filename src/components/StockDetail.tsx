@@ -5,32 +5,48 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ArrowLeft } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
-// Mock stock performance data
+// Enhanced stock performance data for a more realistic chart
 const performanceData = [
   { year: '2019', value: 100 },
-  { year: '2020', value: 120 },
-  { year: '2021', value: 180 },
-  { year: '2022', value: 150 },
-  { year: '2023', value: 200 },
+  { year: '2020 Q1', value: 85 },
+  { year: '2020 Q2', value: 105 },
+  { year: '2020 Q3', value: 120 },
+  { year: '2020 Q4', value: 125 },
+  { year: '2021 Q1', value: 140 },
+  { year: '2021 Q2', value: 160 },
+  { year: '2021 Q3', value: 180 },
+  { year: '2021 Q4', value: 175 },
+  { year: '2022 Q1', value: 165 },
+  { year: '2022 Q2', value: 155 },
+  { year: '2022 Q3', value: 150 },
+  { year: '2022 Q4', value: 160 },
+  { year: '2023 Q1', value: 170 },
+  { year: '2023 Q2', value: 180 },
+  { year: '2023 Q3', value: 190 },
+  { year: '2023 Q4', value: 200 },
 ];
 
-// Mock news data
+// Enhanced news data
 const newsData = [
   {
     title: 'Apple Announces New Product Line',
-    timeAgo: '2 hours ago'
+    timeAgo: '2 hours ago',
+    content: 'Apple unveiled its latest lineup of products, including updates to the iPhone, iPad, and MacBook series.'
   },
   {
     title: 'Q1 Earnings Beat Expectations',
-    timeAgo: '1 day ago'
+    timeAgo: '1 day ago',
+    content: 'Apple reported Q1 earnings of $1.52 per share, beating analysts\' expectations of $1.43 per share.'
   },
   {
     title: 'Apple Partners with AI Startup for New Features',
-    timeAgo: '3 days ago'
+    timeAgo: '3 days ago',
+    content: 'The tech giant announced a new partnership with an AI startup to enhance Siri and other AI features across its ecosystem.'
   },
   {
     title: 'Analysts Upgrade Stock to Buy Rating',
-    timeAgo: '1 week ago'
+    timeAgo: '1 week ago',
+    content: 'Several major analysts have upgraded Apple stock to a "Buy" rating, citing strong product demand and services growth.'
   }
 ];
 
@@ -63,11 +79,14 @@ const StockDetail: React.FC<StockDetailProps> = ({ stock, onBack }) => {
         <button 
           onClick={onBack}
           className="p-1 rounded-md hover:bg-secondary text-muted-foreground hover:text-foreground transition-colors"
+          aria-label="Go back"
         >
           <ArrowLeft size={20} />
         </button>
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 bg-gray-200 rounded-md"></div>
+          <div className="w-12 h-12 bg-gray-200 rounded-md flex items-center justify-center text-gray-500 font-semibold">
+            {stock.symbol.substring(0, 1)}
+          </div>
           <div>
             <h1 className="text-3xl font-bold">{stock.symbol}</h1>
             <p className="text-muted-foreground">{stock.name}</p>
@@ -101,13 +120,14 @@ const StockDetail: React.FC<StockDetailProps> = ({ stock, onBack }) => {
                       dataKey="year" 
                       axisLine={false}
                       tickLine={false}
+                      ticks={['2019', '2020', '2021', '2022', '2023']}
                     />
                     <YAxis 
                       axisLine={false} 
                       tickLine={false}
                       domain={[0, 'dataMax + 20']}
                     />
-                    <Tooltip />
+                    <Tooltip formatter={(value) => [`${value}`, 'Value']} />
                     <Line 
                       type="monotone" 
                       dataKey="value" 
@@ -152,6 +172,14 @@ const StockDetail: React.FC<StockDetailProps> = ({ stock, onBack }) => {
                   <p className="text-muted-foreground mb-1">52 Week Range</p>
                   <p className="text-xl font-semibold">$142.65 - $199.62</p>
                 </div>
+                <div>
+                  <p className="text-muted-foreground mb-1">EPS (TTM)</p>
+                  <p className="text-xl font-semibold">$6.42</p>
+                </div>
+                <div>
+                  <p className="text-muted-foreground mb-1">Profit Margin</p>
+                  <p className="text-xl font-semibold">25.31%</p>
+                </div>
               </div>
             </CardContent>
           </Card>
@@ -186,6 +214,14 @@ const StockDetail: React.FC<StockDetailProps> = ({ stock, onBack }) => {
                   <p className="text-muted-foreground mb-1">Relative Volume</p>
                   <p className="text-xl font-semibold">0.95</p>
                 </div>
+                <div>
+                  <p className="text-muted-foreground mb-1">MACD</p>
+                  <p className="text-xl font-semibold">1.45</p>
+                </div>
+                <div>
+                  <p className="text-muted-foreground mb-1">ATR (14)</p>
+                  <p className="text-xl font-semibold">3.24</p>
+                </div>
               </div>
             </CardContent>
           </Card>
@@ -199,7 +235,8 @@ const StockDetail: React.FC<StockDetailProps> = ({ stock, onBack }) => {
                 {newsData.map((news, index) => (
                   <div key={index} className={index < newsData.length - 1 ? "pb-4 border-b border-border" : ""}>
                     <h4 className="font-medium hover:text-primary cursor-pointer">{news.title}</h4>
-                    <p className="text-sm text-muted-foreground">{news.timeAgo}</p>
+                    <p className="text-sm text-muted-foreground mb-2">{news.timeAgo}</p>
+                    <p className="text-sm">{news.content}</p>
                   </div>
                 ))}
               </div>
