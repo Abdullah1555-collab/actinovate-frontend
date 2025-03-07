@@ -1,8 +1,8 @@
-
-import React from 'react';
+import React, { useState } from 'react';
 import { Bookmark, ArrowUpRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { toast } from "sonner";
+import StockDetail from './StockDetail';
 
 // Mock stocks data
 const watchlistStocks = [
@@ -68,6 +68,8 @@ const trendingStocks = [
 ];
 
 const Stocks = () => {
+  const [selectedStock, setSelectedStock] = useState(null);
+
   const formatCurrency = (value) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
@@ -85,10 +87,20 @@ const Stocks = () => {
     toast.success(`${symbol} added to watchlist`);
   };
 
-  const handleViewDetails = (symbol) => {
-    toast.info(`Viewing details for ${symbol}`);
+  const handleViewDetails = (stock) => {
+    setSelectedStock(stock);
   };
 
+  const handleBackToList = () => {
+    setSelectedStock(null);
+  };
+
+  // If a stock is selected, show its detail view
+  if (selectedStock) {
+    return <StockDetail stock={selectedStock} onBack={handleBackToList} />;
+  }
+
+  // Otherwise show the list view
   return (
     <div className="animate-fadeIn">
       <h1 className="text-3xl font-bold mb-6">Stocks</h1>
@@ -98,7 +110,7 @@ const Stocks = () => {
           <h2 className="text-xl font-semibold mb-4">Your Watchlist</h2>
           <div className="space-y-4">
             {watchlistStocks.map((stock) => (
-              <div key={stock.symbol} className="stat-card flex justify-between items-center">
+              <div key={stock.symbol} className="stat-card flex justify-between items-center p-4 border rounded-lg hover:shadow-md transition-shadow cursor-pointer" onClick={() => handleViewDetails(stock)}>
                 <div>
                   <div className="flex items-center gap-2">
                     <span className="font-bold">{stock.symbol}</span>
@@ -118,7 +130,7 @@ const Stocks = () => {
           <h2 className="text-xl font-semibold mb-4">Trending Stocks</h2>
           <div className="space-y-4">
             {trendingStocks.map((stock) => (
-              <div key={stock.symbol} className="stat-card">
+              <div key={stock.symbol} className="stat-card p-4 border rounded-lg hover:shadow-md transition-shadow">
                 <div className="flex justify-between items-start mb-2">
                   <div className="flex items-center gap-2">
                     <span className="font-bold">{stock.symbol}</span>
@@ -131,10 +143,13 @@ const Stocks = () => {
                 <div className="flex items-center justify-between">
                   <div className="text-lg font-medium">{formatCurrency(stock.price)}</div>
                   <div className="flex gap-2">
-                    <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => handleAddToWatchlist(stock.symbol)}>
+                    <Button variant="ghost" size="icon" className="h-8 w-8" onClick={(e) => {
+                      e.stopPropagation();
+                      handleAddToWatchlist(stock.symbol);
+                    }}>
                       <Bookmark className="h-4 w-4" />
                     </Button>
-                    <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => handleViewDetails(stock.symbol)}>
+                    <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => handleViewDetails(stock)}>
                       <ArrowUpRight className="h-4 w-4" />
                     </Button>
                   </div>
