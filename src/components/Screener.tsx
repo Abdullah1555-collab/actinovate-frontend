@@ -1,6 +1,5 @@
-
 import React, { useState } from 'react';
-import { Download, ChevronDown, ChevronUp, Search, SlidersHorizontal, X } from 'lucide-react';
+import { Download, ChevronDown, ChevronUp, Search, SlidersHorizontal, X, Bell, BellOff } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select } from '@/components/ui/select';
@@ -194,6 +193,7 @@ const Screener = () => {
     key: 'marketCap',
     direction: 'desc'
   });
+  const [alertedStocks, setAlertedStocks] = useState<string[]>([]);
   
   // Filter states
   const [filters, setFilters] = useState({
@@ -306,8 +306,6 @@ const Screener = () => {
       );
     }
     
-    // Apply more filters here as needed...
-    
     setStocks(filteredStocks);
     toast.success(`Found ${filteredStocks.length} stocks matching your criteria`);
   };
@@ -383,6 +381,16 @@ const Screener = () => {
       return `$${(value / 1000000).toFixed(2)}M`;
     } else {
       return `$${value.toLocaleString()}`;
+    }
+  };
+
+  const toggleAlert = (symbol: string) => {
+    if (alertedStocks.includes(symbol)) {
+      setAlertedStocks(alertedStocks.filter(s => s !== symbol));
+      toast.success(`Alert removed for ${symbol}`);
+    } else {
+      setAlertedStocks([...alertedStocks, symbol]);
+      toast.success(`Alert set for ${symbol}`);
     }
   };
   
@@ -778,6 +786,11 @@ const Screener = () => {
                       {getSortIcon('dividendYield')}
                     </div>
                   </th>
+                  <th>
+                    <div className="th-content justify-center group">
+                      Alert
+                    </div>
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -798,6 +811,23 @@ const Screener = () => {
                       <td className="text-right">{formatMarketCap(stock.marketCap)}</td>
                       <td className="text-right">{stock.pe.toFixed(2)}</td>
                       <td className="text-right">{(stock.dividendYield * 100).toFixed(2)}%</td>
+                      <td className="text-center">
+                        <Button 
+                          variant="ghost" 
+                          size="icon" 
+                          className="h-8 w-8"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            toggleAlert(stock.symbol);
+                          }}
+                        >
+                          {alertedStocks.includes(stock.symbol) ? (
+                            <Bell className="h-4 w-4 text-primary" fill="currentColor" />
+                          ) : (
+                            <Bell className="h-4 w-4 text-muted-foreground" />
+                          )}
+                        </Button>
+                      </td>
                     </tr>
                   ))}
               </tbody>

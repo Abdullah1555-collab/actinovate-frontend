@@ -1,8 +1,10 @@
 
 import React, { useState } from 'react';
-import { Search } from 'lucide-react';
+import { Search, Bell } from 'lucide-react';
 import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 import StockDetail from './StockDetail';
+import { toast } from 'sonner';
 
 // Mock stock data
 const stocksData = [
@@ -38,6 +40,7 @@ const stocksData = [
 const Stocks = () => {
   const [selectedStock, setSelectedStock] = useState<null | typeof stocksData[0]>(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [alertedStocks, setAlertedStocks] = useState<string[]>([]);
 
   const handleStockSelect = (stock: typeof stocksData[0]) => {
     setSelectedStock(stock);
@@ -45,6 +48,18 @@ const Stocks = () => {
 
   const handleBackClick = () => {
     setSelectedStock(null);
+  };
+
+  const toggleAlert = (e: React.MouseEvent, symbol: string) => {
+    e.stopPropagation();
+    
+    if (alertedStocks.includes(symbol)) {
+      setAlertedStocks(alertedStocks.filter(s => s !== symbol));
+      toast.success(`Alert removed for ${symbol}`);
+    } else {
+      setAlertedStocks([...alertedStocks, symbol]);
+      toast.success(`Alert set for ${symbol}`);
+    }
   };
 
   const filteredStocks = stocksData.filter(stock =>
@@ -83,6 +98,7 @@ const Stocks = () => {
               <th className="text-right">Change</th>
               <th className="text-right">Volume</th>
               <th className="text-right">Market Cap</th>
+              <th className="text-center">Alert</th>
             </tr>
           </thead>
           <tbody>
@@ -102,6 +118,20 @@ const Stocks = () => {
                 </td>
                 <td className="text-right">{stock.volume}</td>
                 <td className="text-right">{stock.marketCap}</td>
+                <td className="text-center">
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    className="h-8 w-8"
+                    onClick={(e) => toggleAlert(e, stock.symbol)}
+                  >
+                    {alertedStocks.includes(stock.symbol) ? (
+                      <Bell className="h-4 w-4 text-primary" fill="currentColor" />
+                    ) : (
+                      <Bell className="h-4 w-4 text-muted-foreground" />
+                    )}
+                  </Button>
+                </td>
               </tr>
             ))}
           </tbody>
