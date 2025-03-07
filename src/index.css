@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -243,12 +244,19 @@
     @apply flex items-center gap-1;
   }
 
-  .justify-end {
-    @apply justify-end;
+  /* Removing the circular dependency by not using @apply for these classes */
+  .th-content-end {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 0.25rem;
   }
 
-  .justify-center {
-    @apply justify-center;
+  .th-content-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.25rem;
   }
 
   .sort-icon {

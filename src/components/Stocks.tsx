@@ -95,12 +95,10 @@ const Stocks = () => {
     setSelectedStock(null);
   };
 
-  // If a stock is selected, show its detail view
   if (selectedStock) {
     return <StockDetail stock={selectedStock} onBack={handleBackToList} />;
   }
 
-  // Otherwise show the list view
   return (
     <div className="animate-fadeIn">
       <h1 className="text-3xl font-bold mb-6">Stocks</h1>
