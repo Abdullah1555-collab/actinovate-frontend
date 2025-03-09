@@ -13,12 +13,12 @@ const performanceData = [
 
 const StockChart: React.FC = () => {
   return (
-    <div className="p-6 bg-white rounded-lg border border-gray-100 shadow-sm">
-      <h3 className="text-xl font-semibold mb-6">5 Year Performance</h3>
+    <div className="p-6 bg-white rounded-lg border border-gray-100">
+      <h3 className="text-xl font-bold mb-6">5 Year Performance</h3>
       <div className="h-[400px] w-full">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={performanceData} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
-            <CartesianGrid strokeDasharray="3 3" opacity={0.2} />
+            <CartesianGrid strokeDasharray="3 3" opacity={0.1} />
             <XAxis 
               dataKey="year" 
               axisLine={false}
@@ -35,9 +35,9 @@ const StockChart: React.FC = () => {
             <Line 
               type="monotone" 
               dataKey="value" 
-              stroke="#4285F4" 
+              stroke="#2563eb" 
               strokeWidth={2} 
-              dot={{ r: 4, fill: "#4285F4", strokeWidth: 0 }}
+              dot={{ r: 4, fill: "#2563eb", strokeWidth: 0 }}
               activeDot={{ r: 8 }}
             />
           </LineChart>
