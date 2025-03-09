@@ -125,14 +125,14 @@ const StockDetail: React.FC<StockDetailProps> = ({ stock, onBack }) => {
       </div>
 
       <Tabs defaultValue="chart" className="w-full">
-        <TabsList className="mb-6 bg-muted/50 p-1">
+        <TabsList className="border-b border-gray-200">
           <TabsTrigger value="chart">Chart</TabsTrigger>
           <TabsTrigger value="financial">Financial</TabsTrigger>
           <TabsTrigger value="technical">Technical</TabsTrigger>
           <TabsTrigger value="news">News</TabsTrigger>
         </TabsList>
         
-        <TabsContent value="chart" className="p-6 bg-white rounded-lg border border-gray-100">
+        <TabsContent value="chart" className="p-6 bg-card rounded-lg shadow-sm">
           <h3 className="text-xl font-semibold mb-6">5 Year Performance</h3>
           <div className="h-[400px] w-full">
             <ResponsiveContainer width="100%" height="100%">
@@ -153,17 +153,17 @@ const StockDetail: React.FC<StockDetailProps> = ({ stock, onBack }) => {
                 <Line 
                   type="monotone" 
                   dataKey="value" 
-                  stroke="#4f46e5" 
+                  stroke="#8B5CF6" 
                   strokeWidth={2} 
                   dot={{ r: 4 }}
-                  activeDot={{ r: 8 }}
+                  activeDot={{ r: A8 }}
                 />
               </LineChart>
             </ResponsiveContainer>
           </div>
         </TabsContent>
         
-        <TabsContent value="financial" className="p-6 bg-white rounded-lg border border-gray-100">
+        <TabsContent value="financial" className="p-6 bg-card rounded-lg shadow-sm">
           <h3 className="text-xl font-semibold mb-6">Financial Information</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
             <div>
@@ -201,7 +201,7 @@ const StockDetail: React.FC<StockDetailProps> = ({ stock, onBack }) => {
           </div>
         </TabsContent>
         
-        <TabsContent value="technical" className="p-6 bg-white rounded-lg border border-gray-100">
+        <TabsContent value="technical" className="p-6 bg-card rounded-lg shadow-sm">
           <h3 className="text-xl font-semibold mb-6">Technical Indicators</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
             <div>
@@ -239,7 +239,7 @@ const StockDetail: React.FC<StockDetailProps> = ({ stock, onBack }) => {
           </div>
         </TabsContent>
         
-        <TabsContent value="news" className="p-6 bg-white rounded-lg border border-gray-100">
+        <TabsContent value="news" className="p-6 bg-card rounded-lg shadow-sm">
           <h3 className="text-xl font-semibold mb-6">Latest News</h3>
           <div className="space-y-4">
             {newsData.map((news, index) => (
