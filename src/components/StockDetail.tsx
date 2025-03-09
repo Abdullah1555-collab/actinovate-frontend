@@ -1,6 +1,5 @@
 
-import React, { useState } from 'react';
-import { Card, CardContent } from '@/components/ui/card';
+import React from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ArrowLeft } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
@@ -97,23 +96,26 @@ const StockDetail: React.FC<StockDetailProps> = ({ stock, onBack }) => {
 
   return (
     <div className="space-y-4 animate-fadeIn">
-      <div className="flex items-center gap-3 mb-4">
+      <div className="flex items-center mb-6">
         <button 
           onClick={onBack}
-          className="p-1 rounded-md hover:bg-secondary text-muted-foreground hover:text-foreground transition-colors"
+          className="mr-4 p-1 rounded-md hover:bg-secondary text-muted-foreground hover:text-foreground transition-colors"
           aria-label="Go back"
         >
           <ArrowLeft size={20} />
         </button>
-        <div className="flex items-center gap-4">
-          <div className="w-12 h-12 bg-gray-200 rounded-md flex items-center justify-center text-gray-500 font-semibold">
+        
+        <div className="flex items-center mr-4">
+          <div className="w-12 h-12 bg-gray-100 rounded-md flex items-center justify-center text-gray-500 font-semibold">
             {stock.symbol.substring(0, 1)}
           </div>
-          <div>
-            <h1 className="text-3xl font-bold">{stock.symbol}</h1>
-            <p className="text-muted-foreground">{stock.name}</p>
-          </div>
         </div>
+        
+        <div>
+          <h1 className="text-3xl font-bold">{stock.symbol}</h1>
+          <p className="text-muted-foreground">{stock.name}</p>
+        </div>
+        
         <div className="ml-auto text-right">
           <div className="text-3xl font-bold">{formatCurrency(stock.price)}</div>
           <div className={`${stock.changePercent >= 0 ? 'text-success' : 'text-destructive'} text-sm font-medium`}>
@@ -123,147 +125,131 @@ const StockDetail: React.FC<StockDetailProps> = ({ stock, onBack }) => {
       </div>
 
       <Tabs defaultValue="chart" className="w-full">
-        <TabsList className="mb-2">
+        <TabsList className="mb-6 bg-muted/50 p-1">
           <TabsTrigger value="chart">Chart</TabsTrigger>
           <TabsTrigger value="financial">Financial</TabsTrigger>
           <TabsTrigger value="technical">Technical</TabsTrigger>
           <TabsTrigger value="news">News</TabsTrigger>
         </TabsList>
         
-        <TabsContent value="chart">
-          <Card>
-            <CardContent className="p-6">
-              <h3 className="text-xl font-semibold mb-4">5 Year Performance</h3>
-              <div className="h-[400px] w-full">
-                <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={performanceData} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
-                    <CartesianGrid strokeDasharray="3 3" opacity={0.2} />
-                    <XAxis 
-                      dataKey="year" 
-                      axisLine={false}
-                      tickLine={false}
-                      ticks={['2019', '2020', '2021', '2022', '2023']}
-                    />
-                    <YAxis 
-                      axisLine={false} 
-                      tickLine={false}
-                      domain={[0, 'dataMax + 20']}
-                    />
-                    <Tooltip formatter={(value) => [`${value}`, 'Value']} />
-                    <Line 
-                      type="monotone" 
-                      dataKey="value" 
-                      stroke="#4f46e5" 
-                      strokeWidth={2} 
-                      dot={{ r: 4 }}
-                      activeDot={{ r: 8 }}
-                    />
-                  </LineChart>
-                </ResponsiveContainer>
-              </div>
-            </CardContent>
-          </Card>
+        <TabsContent value="chart" className="p-6 bg-white rounded-lg border border-gray-100">
+          <h3 className="text-xl font-semibold mb-6">5 Year Performance</h3>
+          <div className="h-[400px] w-full">
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={performanceData} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
+                <CartesianGrid strokeDasharray="3 3" opacity={0.2} />
+                <XAxis 
+                  dataKey="year" 
+                  axisLine={false}
+                  tickLine={false}
+                  ticks={['2019', '2020', '2021', '2022', '2023']}
+                />
+                <YAxis 
+                  axisLine={false} 
+                  tickLine={false}
+                  domain={[0, 'dataMax + 20']}
+                />
+                <Tooltip formatter={(value) => [`${value}`, 'Value']} />
+                <Line 
+                  type="monotone" 
+                  dataKey="value" 
+                  stroke="#4f46e5" 
+                  strokeWidth={2} 
+                  dot={{ r: 4 }}
+                  activeDot={{ r: 8 }}
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
         </TabsContent>
         
-        <TabsContent value="financial">
-          <Card>
-            <CardContent className="p-6">
-              <h3 className="text-xl font-semibold mb-4">Financial Information</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <p className="text-muted-foreground text-sm">Market Cap</p>
-                  <p className="text-xl font-semibold">{financialData.marketCap}</p>
-                </div>
-                <div>
-                  <p className="text-muted-foreground text-sm">P/E Ratio</p>
-                  <p className="text-xl font-semibold">{financialData.peRatio}</p>
-                </div>
-                <div>
-                  <p className="text-muted-foreground text-sm">Revenue (TTM)</p>
-                  <p className="text-xl font-semibold">{financialData.revenue}</p>
-                </div>
-                <div>
-                  <p className="text-muted-foreground text-sm">Next Report Date</p>
-                  <p className="text-xl font-semibold">{financialData.nextReportDate}</p>
-                </div>
-                <div>
-                  <p className="text-muted-foreground text-sm">Dividend Yield</p>
-                  <p className="text-xl font-semibold">{financialData.dividendYield}</p>
-                </div>
-                <div>
-                  <p className="text-muted-foreground text-sm">52 Week Range</p>
-                  <p className="text-xl font-semibold">{financialData.weekRange}</p>
-                </div>
-                <div>
-                  <p className="text-muted-foreground text-sm">EPS (TTM)</p>
-                  <p className="text-xl font-semibold">{financialData.eps}</p>
-                </div>
-                <div>
-                  <p className="text-muted-foreground text-sm">Profit Margin</p>
-                  <p className="text-xl font-semibold">{financialData.profitMargin}</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+        <TabsContent value="financial" className="p-6 bg-white rounded-lg border border-gray-100">
+          <h3 className="text-xl font-semibold mb-6">Financial Information</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
+            <div>
+              <p className="text-muted-foreground text-sm">Market Cap</p>
+              <p className="text-xl font-semibold">{financialData.marketCap}</p>
+            </div>
+            <div>
+              <p className="text-muted-foreground text-sm">P/E Ratio</p>
+              <p className="text-xl font-semibold">{financialData.peRatio}</p>
+            </div>
+            <div>
+              <p className="text-muted-foreground text-sm">Revenue (TTM)</p>
+              <p className="text-xl font-semibold">{financialData.revenue}</p>
+            </div>
+            <div>
+              <p className="text-muted-foreground text-sm">Next Report Date</p>
+              <p className="text-xl font-semibold">{financialData.nextReportDate}</p>
+            </div>
+            <div>
+              <p className="text-muted-foreground text-sm">Dividend Yield</p>
+              <p className="text-xl font-semibold">{financialData.dividendYield}</p>
+            </div>
+            <div>
+              <p className="text-muted-foreground text-sm">52 Week Range</p>
+              <p className="text-xl font-semibold">{financialData.weekRange}</p>
+            </div>
+            <div>
+              <p className="text-muted-foreground text-sm">EPS (TTM)</p>
+              <p className="text-xl font-semibold">{financialData.eps}</p>
+            </div>
+            <div>
+              <p className="text-muted-foreground text-sm">Profit Margin</p>
+              <p className="text-xl font-semibold">{financialData.profitMargin}</p>
+            </div>
+          </div>
         </TabsContent>
         
-        <TabsContent value="technical">
-          <Card>
-            <CardContent className="p-6">
-              <h3 className="text-xl font-semibold mb-4">Technical Indicators</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <p className="text-muted-foreground text-sm">RSI (14)</p>
-                  <p className="text-xl font-semibold">{technicalData.rsi}</p>
-                </div>
-                <div>
-                  <p className="text-muted-foreground text-sm">Moving Average (50)</p>
-                  <p className="text-xl font-semibold">{technicalData.movingAvg50}</p>
-                </div>
-                <div>
-                  <p className="text-muted-foreground text-sm">Moving Average (200)</p>
-                  <p className="text-xl font-semibold">{technicalData.movingAvg200}</p>
-                </div>
-                <div>
-                  <p className="text-muted-foreground text-sm">Beta (5 Year)</p>
-                  <p className="text-xl font-semibold">{technicalData.beta}</p>
-                </div>
-                <div>
-                  <p className="text-muted-foreground text-sm">Average Volume</p>
-                  <p className="text-xl font-semibold">{technicalData.avgVolume}</p>
-                </div>
-                <div>
-                  <p className="text-muted-foreground text-sm">Relative Volume</p>
-                  <p className="text-xl font-semibold">{technicalData.relativeVolume}</p>
-                </div>
-                <div>
-                  <p className="text-muted-foreground text-sm">MACD</p>
-                  <p className="text-xl font-semibold">{technicalData.macd}</p>
-                </div>
-                <div>
-                  <p className="text-muted-foreground text-sm">ATR (14)</p>
-                  <p className="text-xl font-semibold">{technicalData.atr}</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+        <TabsContent value="technical" className="p-6 bg-white rounded-lg border border-gray-100">
+          <h3 className="text-xl font-semibold mb-6">Technical Indicators</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
+            <div>
+              <p className="text-muted-foreground text-sm">RSI (14)</p>
+              <p className="text-xl font-semibold">{technicalData.rsi}</p>
+            </div>
+            <div>
+              <p className="text-muted-foreground text-sm">Moving Average (50)</p>
+              <p className="text-xl font-semibold">{technicalData.movingAvg50}</p>
+            </div>
+            <div>
+              <p className="text-muted-foreground text-sm">Moving Average (200)</p>
+              <p className="text-xl font-semibold">{technicalData.movingAvg200}</p>
+            </div>
+            <div>
+              <p className="text-muted-foreground text-sm">Beta (5 Year)</p>
+              <p className="text-xl font-semibold">{technicalData.beta}</p>
+            </div>
+            <div>
+              <p className="text-muted-foreground text-sm">Average Volume</p>
+              <p className="text-xl font-semibold">{technicalData.avgVolume}</p>
+            </div>
+            <div>
+              <p className="text-muted-foreground text-sm">Relative Volume</p>
+              <p className="text-xl font-semibold">{technicalData.relativeVolume}</p>
+            </div>
+            <div>
+              <p className="text-muted-foreground text-sm">MACD</p>
+              <p className="text-xl font-semibold">{technicalData.macd}</p>
+            </div>
+            <div>
+              <p className="text-muted-foreground text-sm">ATR (14)</p>
+              <p className="text-xl font-semibold">{technicalData.atr}</p>
+            </div>
+          </div>
         </TabsContent>
         
-        <TabsContent value="news">
-          <Card>
-            <CardContent className="p-6">
-              <h3 className="text-xl font-semibold mb-4">Latest News</h3>
-              <div className="space-y-4">
-                {newsData.map((news, index) => (
-                  <div key={index} className={index < newsData.length - 1 ? "pb-4 border-b border-border" : ""}>
-                    <h4 className="font-medium hover:text-primary cursor-pointer">{news.title}</h4>
-                    <p className="text-sm text-muted-foreground mb-2">{news.timeAgo}</p>
-                    <p className="text-sm text-muted-foreground">{news.content}</p>
-                  </div>
-                ))}
+        <TabsContent value="news" className="p-6 bg-white rounded-lg border border-gray-100">
+          <h3 className="text-xl font-semibold mb-6">Latest News</h3>
+          <div className="space-y-4">
+            {newsData.map((news, index) => (
+              <div key={index} className={index < newsData.length - 1 ? "pb-4 border-b border-border" : ""}>
+                <h4 className="font-medium hover:text-primary cursor-pointer">{news.title}</h4>
+                <p className="text-sm text-muted-foreground mb-2">{news.timeAgo}</p>
+                <p className="text-sm text-muted-foreground">{news.content}</p>
               </div>
-            </CardContent>
-          </Card>
+            ))}
+          </div>
         </TabsContent>
       </Tabs>
     </div>
