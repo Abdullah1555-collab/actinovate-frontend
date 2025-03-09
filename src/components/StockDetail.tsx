@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ArrowLeft } from 'lucide-react';
@@ -7,22 +6,10 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 // Enhanced stock performance data for a more realistic chart
 const performanceData = [
   { year: '2019', value: 100 },
-  { year: '2020 Q1', value: 85 },
-  { year: '2020 Q2', value: 105 },
-  { year: '2020 Q3', value: 120 },
-  { year: '2020 Q4', value: 125 },
-  { year: '2021 Q1', value: 140 },
-  { year: '2021 Q2', value: 160 },
-  { year: '2021 Q3', value: 180 },
-  { year: '2021 Q4', value: 175 },
-  { year: '2022 Q1', value: 165 },
-  { year: '2022 Q2', value: 155 },
-  { year: '2022 Q3', value: 150 },
-  { year: '2022 Q4', value: 160 },
-  { year: '2023 Q1', value: 170 },
-  { year: '2023 Q2', value: 180 },
-  { year: '2023 Q3', value: 190 },
-  { year: '2023 Q4', value: 200 },
+  { year: '2020', value: 120 },
+  { year: '2021', value: 180 },
+  { year: '2022', value: 150 },
+  { year: '2023', value: 200 },
 ];
 
 // Enhanced news data
@@ -125,14 +112,14 @@ const StockDetail: React.FC<StockDetailProps> = ({ stock, onBack }) => {
       </div>
 
       <Tabs defaultValue="chart" className="w-full">
-        <TabsList className="border-b border-gray-200">
-          <TabsTrigger value="chart">Chart</TabsTrigger>
-          <TabsTrigger value="financial">Financial</TabsTrigger>
-          <TabsTrigger value="technical">Technical</TabsTrigger>
-          <TabsTrigger value="news">News</TabsTrigger>
+        <TabsList className="w-auto inline-flex rounded-md bg-slate-50 p-1 shadow-sm mb-6 border border-gray-100">
+          <TabsTrigger value="chart" className="rounded-md">Chart</TabsTrigger>
+          <TabsTrigger value="financial" className="rounded-md">Financial</TabsTrigger>
+          <TabsTrigger value="technical" className="rounded-md">Technical</TabsTrigger>
+          <TabsTrigger value="news" className="rounded-md">News</TabsTrigger>
         </TabsList>
         
-        <TabsContent value="chart" className="p-6 bg-card rounded-lg shadow-sm">
+        <TabsContent value="chart" className="p-6 bg-white rounded-lg border border-gray-100 shadow-sm">
           <h3 className="text-xl font-semibold mb-6">5 Year Performance</h3>
           <div className="h-[400px] w-full">
             <ResponsiveContainer width="100%" height="100%">
@@ -148,14 +135,15 @@ const StockDetail: React.FC<StockDetailProps> = ({ stock, onBack }) => {
                   axisLine={false} 
                   tickLine={false}
                   domain={[0, 'dataMax + 20']}
+                  ticks={[0, 50, 100, 150, 200]}
                 />
                 <Tooltip formatter={(value) => [`${value}`, 'Value']} />
                 <Line 
                   type="monotone" 
                   dataKey="value" 
-                  stroke="#8B5CF6" 
+                  stroke="#4285F4" 
                   strokeWidth={2} 
-                  dot={{ r: 4 }}
+                  dot={{ r: 4, fill: "#4285F4", strokeWidth: 0 }}
                   activeDot={{ r: 8 }}
                 />
               </LineChart>
@@ -163,7 +151,7 @@ const StockDetail: React.FC<StockDetailProps> = ({ stock, onBack }) => {
           </div>
         </TabsContent>
         
-        <TabsContent value="financial" className="p-6 bg-card rounded-lg shadow-sm">
+        <TabsContent value="financial" className="p-6 bg-white rounded-lg border border-gray-100 shadow-sm">
           <h3 className="text-xl font-semibold mb-6">Financial Information</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
             <div>
@@ -201,7 +189,7 @@ const StockDetail: React.FC<StockDetailProps> = ({ stock, onBack }) => {
           </div>
         </TabsContent>
         
-        <TabsContent value="technical" className="p-6 bg-card rounded-lg shadow-sm">
+        <TabsContent value="technical" className="p-6 bg-white rounded-lg border border-gray-100 shadow-sm">
           <h3 className="text-xl font-semibold mb-6">Technical Indicators</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
             <div>
@@ -239,7 +227,7 @@ const StockDetail: React.FC<StockDetailProps> = ({ stock, onBack }) => {
           </div>
         </TabsContent>
         
-        <TabsContent value="news" className="p-6 bg-card rounded-lg shadow-sm">
+        <TabsContent value="news" className="p-6 bg-white rounded-lg border border-gray-100 shadow-sm">
           <h3 className="text-xl font-semibold mb-6">Latest News</h3>
           <div className="space-y-4">
             {newsData.map((news, index) => (
