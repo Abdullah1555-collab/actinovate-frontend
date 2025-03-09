@@ -156,7 +156,7 @@ const StockDetail: React.FC<StockDetailProps> = ({ stock, onBack }) => {
                   stroke="#8B5CF6" 
                   strokeWidth={2} 
                   dot={{ r: 4 }}
-                  activeDot={{ r: A8 }}
+                  activeDot={{ r: 8 }}
                 />
               </LineChart>
             </ResponsiveContainer>
