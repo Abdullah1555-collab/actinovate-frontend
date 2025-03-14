@@ -11,9 +11,9 @@ const stocksData = [
   {
     symbol: "AAPL",
     name: "Apple Inc.",
-    price: 185.92,
-    change: 2.34,
-    changePercent: 1.28,
+    price: 182.68,
+    change: 1.23,
+    changePercent: 0.67,
     volume: "52.4M",
     marketCap: "2.89T"
   },
