@@ -89,16 +89,16 @@ const Stocks = () => {
       </div>
 
       <div className="table-container">
-        <table className="stock-table">
-          <thead>
+        <table className="stock-table w-full rounded-lg overflow-hidden">
+          <thead className="bg-gray-50 border-b border-gray-100">
             <tr>
-              <th>Symbol</th>
-              <th>Name</th>
-              <th className="text-right">Price</th>
-              <th className="text-right">Change</th>
-              <th className="text-right">Volume</th>
-              <th className="text-right">Market Cap</th>
-              <th className="text-center">Alert</th>
+              <th className="px-4 py-3 text-left text-sm font-medium text-gray-500">Symbol</th>
+              <th className="px-4 py-3 text-left text-sm font-medium text-gray-500">Name</th>
+              <th className="px-4 py-3 text-right text-sm font-medium text-gray-500">Price</th>
+              <th className="px-4 py-3 text-right text-sm font-medium text-gray-500">Change</th>
+              <th className="px-4 py-3 text-right text-sm font-medium text-gray-500">Volume</th>
+              <th className="px-4 py-3 text-right text-sm font-medium text-gray-500">Market Cap</th>
+              <th className="px-4 py-3 text-center text-sm font-medium text-gray-500">Alert</th>
             </tr>
           </thead>
           <tbody>
@@ -106,19 +106,19 @@ const Stocks = () => {
               <tr
                 key={stock.symbol}
                 onClick={() => handleStockSelect(stock)}
-                className="cursor-pointer hover:bg-secondary/50 transition-colors"
+                className="cursor-pointer hover:bg-gray-50 border-b border-gray-100 transition-colors"
               >
-                <td className="font-medium">{stock.symbol}</td>
-                <td>{stock.name}</td>
-                <td className="text-right">${stock.price.toFixed(2)}</td>
-                <td className={`text-right ${stock.change >= 0 ? 'text-success' : 'text-destructive'}`}>
+                <td className="px-4 py-4 font-medium">{stock.symbol}</td>
+                <td className="px-4 py-4 text-gray-600">{stock.name}</td>
+                <td className="px-4 py-4 text-right">${stock.price.toFixed(2)}</td>
+                <td className={`px-4 py-4 text-right ${stock.change >= 0 ? 'text-green-500' : 'text-red-500'}`}>
                   {stock.change >= 0 ? '+' : ''}{stock.change.toFixed(2)}
                   {' '}
                   ({stock.change >= 0 ? '+' : ''}{stock.changePercent.toFixed(2)}%)
                 </td>
-                <td className="text-right">{stock.volume}</td>
-                <td className="text-right">{stock.marketCap}</td>
-                <td className="text-center">
+                <td className="px-4 py-4 text-right text-gray-600">{stock.volume}</td>
+                <td className="px-4 py-4 text-right text-gray-600">{stock.marketCap}</td>
+                <td className="px-4 py-4 text-center">
                   <Button 
                     variant="ghost" 
                     size="icon" 
