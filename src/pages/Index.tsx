@@ -63,18 +63,21 @@ const Index = () => {
       >
         <div className="sidebar-header flex items-center justify-between h-16 px-4 border-b border-border">
           {!sidebarCollapsed ? (
-            <div className="flex items-center">
+            <div className="flex items-center space-x-2">
               <img 
-                src="/lovable-uploads/5ceca537-6180-434a-b7d1-0f3e12938eca.png" 
+                src="/lovable-uploads/204e8886-d222-41d6-9b9c-9a9de2ac3da9.png" 
                 alt="ACTINOVATE" 
-                className="h-8 mr-2"
+                className="h-8 w-auto"
               />
+              <span className="font-bold text-lg bg-gradient-to-r from-blue-500 to-orange-500 bg-clip-text text-transparent">
+                ACTINOVATE
+              </span>
             </div>
           ) : (
             <img 
-              src="/lovable-uploads/5ceca537-6180-434a-b7d1-0f3e12938eca.png" 
+              src="/lovable-uploads/204e8886-d222-41d6-9b9c-9a9de2ac3da9.png" 
               alt="ACTINOVATE" 
-              className="h-8"
+              className="h-8 w-auto"
             />
           )}
           <button 
@@ -148,7 +151,16 @@ const Index = () => {
         !sidebarCollapsed && !mobileHidden && "ml-[250px]",
         sidebarCollapsed && !mobileHidden && "ml-16"
       )}>
-        <div className="sticky top-0 z-10 flex items-center justify-end p-4 bg-background/95 backdrop-blur-sm border-b border-border">
+        <div className="sticky top-0 z-10 flex items-center justify-between p-4 bg-background/95 backdrop-blur-sm border-b border-border">
+          <div className="sm:hidden">
+            <button 
+              className="p-2 rounded-md hover:bg-secondary" 
+              onClick={toggleMobile}
+            >
+              <Menu size={20} />
+            </button>
+          </div>
+          <div className="flex-1 sm:hidden"></div>
           <ThemeToggle />
         </div>
         

@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select } from '@/components/ui/select';
 import { toast } from 'sonner';
+import { cn } from '@/lib/utils';
 
 // Mock data for the screener
 const mockStocks = [
@@ -188,7 +189,7 @@ const industries = [
 const Screener = () => {
   const [stocks, setStocks] = useState(mockStocks);
   const [searchTerm, setSearchTerm] = useState('');
-  const [filterVisible, setFilterVisible] = useState(true);
+  const [filterVisible, setFilterVisible] = useState(false);
   const [sortConfig, setSortConfig] = useState({
     key: 'marketCap',
     direction: 'desc'
@@ -396,10 +397,10 @@ const Screener = () => {
   
   return (
     <div className="screener-page">
-      <div className="header-section">
+      <div className="header-section flex justify-between items-center mb-6">
         <div>
-          <h1 className="page-title">Stock Screener</h1>
-          <p className="subtitle">Find and filter stocks based on your criteria</p>
+          <h1 className="text-2xl font-bold">Stock Screener</h1>
+          <p className="text-muted-foreground">Find and filter stocks based on your criteria</p>
         </div>
         <div className="flex items-center gap-2">
           <Button variant="outline" onClick={toggleFilter} className="mobile-filter-toggle">
@@ -413,20 +414,27 @@ const Screener = () => {
         </div>
       </div>
       
-      <div className="screener-layout">
-        <div className={`filter-sidebar ${filterVisible ? 'open' : 'closed'}`}>
-          <div className="filter-sidebar-header">
+      <div className="screener-layout flex relative">
+        {/* Filter Sidebar */}
+        <div 
+          className={cn(
+            "filter-sidebar w-64 border-r border-border p-4 transition-all duration-300 overflow-hidden bg-background",
+            filterVisible ? "block absolute md:relative z-20 h-[calc(100vh-8rem)] md:h-auto overflow-y-auto" : "hidden md:hidden"
+          )}
+        >
+          <div className="filter-sidebar-header flex items-center justify-between mb-4">
             <h3 className="text-sm font-medium">Filters</h3>
             <Button variant="ghost" size="sm" className="h-8 w-8 p-0" onClick={toggleFilter}>
               <X className="h-4 w-4" />
             </Button>
           </div>
           
-          <div className="filter-sidebar-content">
+          <div className="filter-sidebar-content space-y-4">
+            {/* Filter groups */}
             <div className="filter-group">
-              <label className="filter-label">Search Ticker:</label>
+              <label className="text-sm mb-1 block text-muted-foreground">Search Ticker:</label>
               <Input 
-                className="filter-input" 
+                className="w-full" 
                 placeholder="Enter Ticker Symbol" 
                 name="ticker"
                 value={filters.ticker}
@@ -703,7 +711,7 @@ const Screener = () => {
             </div>
             
             <div className="mt-6 space-y-2">
-              <Button onClick={applyFilters} className="apply-filters-btn">
+              <Button onClick={applyFilters} className="w-full">
                 Apply Filters
               </Button>
               <Button 
@@ -717,7 +725,8 @@ const Screener = () => {
           </div>
         </div>
         
-        <div className="results-section">
+        {/* Results Section */}
+        <div className="results-section flex-1 overflow-hidden">
           <div className="mb-4">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -730,64 +739,64 @@ const Screener = () => {
             </div>
           </div>
           
-          <div className="results-header">
-            <span>{stocks.length} stocks found</span>
+          <div className="results-header mb-2">
+            <span className="text-sm text-muted-foreground">{stocks.length} stocks found</span>
           </div>
           
-          <div className="table-container">
-            <table className="stock-table">
+          <div className="table-container overflow-x-auto">
+            <table className="w-full border-collapse">
               <thead>
-                <tr>
-                  <th onClick={() => handleSort('symbol')}>
-                    <div className="th-content group">
+                <tr className="border-b border-border">
+                  <th onClick={() => handleSort('symbol')} className="p-2 text-left cursor-pointer">
+                    <div className="flex items-center gap-1 group">
                       Symbol
                       {getSortIcon('symbol')}
                     </div>
                   </th>
-                  <th onClick={() => handleSort('name')}>
-                    <div className="th-content group">
+                  <th onClick={() => handleSort('name')} className="p-2 text-left cursor-pointer">
+                    <div className="flex items-center gap-1 group">
                       Name
                       {getSortIcon('name')}
                     </div>
                   </th>
-                  <th onClick={() => handleSort('sector')}>
-                    <div className="th-content group">
+                  <th onClick={() => handleSort('sector')} className="p-2 text-left cursor-pointer">
+                    <div className="flex items-center gap-1 group">
                       Sector
                       {getSortIcon('sector')}
                     </div>
                   </th>
-                  <th onClick={() => handleSort('price')}>
-                    <div className="th-content justify-end group">
+                  <th onClick={() => handleSort('price')} className="p-2 text-right cursor-pointer">
+                    <div className="flex items-center justify-end gap-1 group">
                       Price
                       {getSortIcon('price')}
                     </div>
                   </th>
-                  <th onClick={() => handleSort('changePercent')}>
-                    <div className="th-content justify-end group">
+                  <th onClick={() => handleSort('changePercent')} className="p-2 text-right cursor-pointer">
+                    <div className="flex items-center justify-end gap-1 group">
                       Change %
                       {getSortIcon('changePercent')}
                     </div>
                   </th>
-                  <th onClick={() => handleSort('marketCap')}>
-                    <div className="th-content justify-end group">
+                  <th onClick={() => handleSort('marketCap')} className="p-2 text-right cursor-pointer">
+                    <div className="flex items-center justify-end gap-1 group">
                       Market Cap
                       {getSortIcon('marketCap')}
                     </div>
                   </th>
-                  <th onClick={() => handleSort('pe')}>
-                    <div className="th-content justify-end group">
+                  <th onClick={() => handleSort('pe')} className="p-2 text-right cursor-pointer">
+                    <div className="flex items-center justify-end gap-1 group">
                       P/E
                       {getSortIcon('pe')}
                     </div>
                   </th>
-                  <th onClick={() => handleSort('dividendYield')}>
-                    <div className="th-content justify-end group">
+                  <th onClick={() => handleSort('dividendYield')} className="p-2 text-right cursor-pointer">
+                    <div className="flex items-center justify-end gap-1 group">
                       Div Yield
                       {getSortIcon('dividendYield')}
                     </div>
                   </th>
-                  <th>
-                    <div className="th-content justify-center group">
+                  <th className="p-2 text-center">
+                    <div className="flex items-center justify-center gap-1 group">
                       Alert
                     </div>
                   </th>
@@ -800,18 +809,18 @@ const Screener = () => {
                     stock.name.toLowerCase().includes(searchTerm.toLowerCase())
                   )
                   .map((stock) => (
-                    <tr key={stock.symbol} className="stock-row">
-                      <td className="font-medium">{stock.symbol}</td>
-                      <td>{stock.name}</td>
-                      <td>{stock.sector}</td>
-                      <td className="text-right">${stock.price.toFixed(2)}</td>
-                      <td className={`text-right ${stock.changePercent >= 0 ? 'profit' : 'loss'}`}>
+                    <tr key={stock.symbol} className="border-b border-border hover:bg-secondary/20">
+                      <td className="p-2 font-medium">{stock.symbol}</td>
+                      <td className="p-2">{stock.name}</td>
+                      <td className="p-2">{stock.sector}</td>
+                      <td className="p-2 text-right">${stock.price.toFixed(2)}</td>
+                      <td className={`p-2 text-right ${stock.changePercent >= 0 ? 'text-green-500' : 'text-red-500'}`}>
                         {stock.changePercent >= 0 ? '+' : ''}{stock.changePercent.toFixed(2)}%
                       </td>
-                      <td className="text-right">{formatMarketCap(stock.marketCap)}</td>
-                      <td className="text-right">{stock.pe.toFixed(2)}</td>
-                      <td className="text-right">{(stock.dividendYield * 100).toFixed(2)}%</td>
-                      <td className="text-center">
+                      <td className="p-2 text-right">{formatMarketCap(stock.marketCap)}</td>
+                      <td className="p-2 text-right">{stock.pe.toFixed(2)}</td>
+                      <td className="p-2 text-right">{(stock.dividendYield * 100).toFixed(2)}%</td>
+                      <td className="p-2 text-center">
                         <Button 
                           variant="ghost" 
                           size="icon" 
@@ -835,6 +844,14 @@ const Screener = () => {
           </div>
         </div>
       </div>
+      
+      {/* Overlay for mobile */}
+      {filterVisible && (
+        <div 
+          className="fixed inset-0 bg-black/20 backdrop-blur-sm z-10 md:hidden"
+          onClick={toggleFilter}
+        ></div>
+      )}
     </div>
   );
 };
