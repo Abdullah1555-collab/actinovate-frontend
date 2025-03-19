@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { 
@@ -9,6 +10,7 @@ import {
   Menu
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import ThemeToggle from '@/components/ThemeToggle';
 
 // Import our pages
 import Dashboard from '@/components/Dashboard';
@@ -60,7 +62,21 @@ const Index = () => {
         )}
       >
         <div className="sidebar-header flex items-center justify-between h-16 px-4 border-b border-border">
-          {!sidebarCollapsed && <h2 className="sidebar-title text-xl font-semibold">StockWise</h2>}
+          {!sidebarCollapsed ? (
+            <div className="flex items-center">
+              <img 
+                src="/lovable-uploads/5ceca537-6180-434a-b7d1-0f3e12938eca.png" 
+                alt="ACTINOVATE" 
+                className="h-8 mr-2"
+              />
+            </div>
+          ) : (
+            <img 
+              src="/lovable-uploads/5ceca537-6180-434a-b7d1-0f3e12938eca.png" 
+              alt="ACTINOVATE" 
+              className="h-8"
+            />
+          )}
           <button 
             className="toggle-btn text-muted-foreground p-2 rounded-md transition-colors hover:bg-secondary hover:text-foreground"
             onClick={toggleSidebar}
@@ -118,6 +134,12 @@ const Index = () => {
             {!sidebarCollapsed && <span>Portfolio</span>}
           </Link>
         </nav>
+        
+        {!sidebarCollapsed && (
+          <div className="absolute bottom-6 left-0 right-0 px-4">
+            <ThemeToggle />
+          </div>
+        )}
       </div>
       
       {/* Main content */}
@@ -126,6 +148,10 @@ const Index = () => {
         !sidebarCollapsed && !mobileHidden && "ml-[250px]",
         sidebarCollapsed && !mobileHidden && "ml-16"
       )}>
+        <div className="sticky top-0 z-10 flex items-center justify-end p-4 bg-background/95 backdrop-blur-sm border-b border-border">
+          <ThemeToggle />
+        </div>
+        
         {/* Page content */}
         <div className="max-w-7xl mx-auto px-6 py-6 animate-fadeIn">
           {activePage === 'dashboard' && <Dashboard />}
