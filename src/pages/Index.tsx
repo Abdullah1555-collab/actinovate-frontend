@@ -21,7 +21,7 @@ import Stocks from '@/components/Stocks';
 const Index = () => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [mobileHidden, setMobileHidden] = useState(window.innerWidth < 1024);
-  const [activePage, setActivePage] = useState('portfolio');
+  const [activePage, setActivePage] = useState('stocks');
 
   useEffect(() => {
     const handleResize = () => {
