@@ -23,12 +23,12 @@ const StockDetail: React.FC<StockDetailProps> = ({ stock, onBack }) => {
     <div className="space-y-4 animate-fadeIn">
       <StockHeader stock={stock} onBack={onBack} />
 
-      <Tabs defaultValue="chart">
-        <TabsList className="mb-6 p-1 bg-gray-50 inline-flex rounded-md border border-gray-100">
-          <TabsTrigger value="chart" className="rounded-md">Chart</TabsTrigger>
-          <TabsTrigger value="financial" className="rounded-md">Financial</TabsTrigger>
-          <TabsTrigger value="technical" className="rounded-md">Technical</TabsTrigger>
-          <TabsTrigger value="news" className="rounded-md">News</TabsTrigger>
+      <Tabs defaultValue="chart" className="w-full">
+        <TabsList className="mb-6 p-1 bg-muted/50 inline-flex rounded-md border border-border">
+          <TabsTrigger value="chart" className="rounded-md text-foreground">Chart</TabsTrigger>
+          <TabsTrigger value="financial" className="rounded-md text-foreground">Financial</TabsTrigger>
+          <TabsTrigger value="technical" className="rounded-md text-foreground">Technical</TabsTrigger>
+          <TabsTrigger value="news" className="rounded-md text-foreground">News</TabsTrigger>
         </TabsList>
         
         <TabsContent value="chart" className="block">
