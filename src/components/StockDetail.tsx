@@ -31,7 +31,7 @@ const StockDetail: React.FC<StockDetailProps> = ({ stock, onBack }) => {
           <TabsTrigger value="news" className="rounded-md">News</TabsTrigger>
         </TabsList>
         
-        <TabsContent value="chart">
+        <TabsContent value="chart" className="block">
           <StockChart />
         </TabsContent>
         
