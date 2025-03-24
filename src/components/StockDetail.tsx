@@ -35,15 +35,15 @@ const StockDetail: React.FC<StockDetailProps> = ({ stock, onBack }) => {
           <StockChart />
         </TabsContent>
         
-        <TabsContent value="financial">
+        <TabsContent value="financial" className="block">
           <FinancialData />
         </TabsContent>
         
-        <TabsContent value="technical">
+        <TabsContent value="technical" className="block">
           <TechnicalData />
         </TabsContent>
         
-        <TabsContent value="news">
+        <TabsContent value="news" className="block">
           <NewsData />
         </TabsContent>
       </Tabs>
