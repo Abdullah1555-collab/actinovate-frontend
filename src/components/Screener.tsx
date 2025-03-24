@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
-import { Download, ChevronDown, ChevronUp, Search, SlidersHorizontal, X, Bell, BellOff } from 'lucide-react';
+import { Download, ChevronDown, ChevronUp, Search, SlidersHorizontal, X, Bell, BellOff, AlertTriangle, Info } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select } from '@/components/ui/select';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
+import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Switch } from '@/components/ui/switch';
 
 // Mock data for the screener
 const mockStocks = [
@@ -195,6 +199,11 @@ const Screener = () => {
     direction: 'desc'
   });
   const [alertedStocks, setAlertedStocks] = useState<string[]>([]);
+  
+  // Alert settings states
+  const [alertsEnabled, setAlertsEnabled] = useState(false);
+  const [alertType, setAlertType] = useState<'price' | 'volume' | 'movement'>('price');
+  const [alertThreshold, setAlertThreshold] = useState('5');
   
   // Filter states
   const [filters, setFilters] = useState({
@@ -393,6 +402,11 @@ const Screener = () => {
       setAlertedStocks([...alertedStocks, symbol]);
       toast.success(`Alert set for ${symbol}`);
     }
+  };
+  
+  const toggleAlertsEnabled = () => {
+    setAlertsEnabled(!alertsEnabled);
+    toast.success(alertsEnabled ? 'Alerts disabled' : 'Alerts enabled');
   };
   
   return (
@@ -739,9 +753,85 @@ const Screener = () => {
             </div>
           </div>
           
-          <div className="results-header mb-2">
+          <div className="results-header mb-2 flex justify-between items-center">
             <span className="text-sm text-muted-foreground">{stocks.length} stocks found</span>
+            
+            <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2">
+                <span className="text-sm text-muted-foreground">Alerts:</span>
+                <Switch 
+                  checked={alertsEnabled} 
+                  onCheckedChange={toggleAlertsEnabled} 
+                  className="data-[state=checked]:bg-blue-500"
+                />
+              </div>
+              
+              {alertsEnabled && (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="outline" size="sm" className="h-8 px-2 ml-2">
+                      <AlertTriangle className="h-4 w-4 mr-2 text-orange-500" />
+                      Alert Settings
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="w-56 p-3">
+                    <div className="space-y-4">
+                      <div>
+                        <h4 className="font-medium mb-2">Alert Type</h4>
+                        <RadioGroup 
+                          value={alertType} 
+                          onValueChange={(value) => setAlertType(value as 'price' | 'volume' | 'movement')}
+                          className="flex flex-col gap-2"
+                        >
+                          <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="price" id="alert-price" />
+                            <label htmlFor="alert-price" className="text-sm">Price Change</label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="volume" id="alert-volume" />
+                            <label htmlFor="alert-volume" className="text-sm">Volume Spike</label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="movement" id="alert-movement" />
+                            <label htmlFor="alert-movement" className="text-sm">Price Movement</label>
+                          </div>
+                        </RadioGroup>
+                      </div>
+                      
+                      <div>
+                        <h4 className="font-medium mb-2">Threshold (%)</h4>
+                        <Input 
+                          type="number" 
+                          value={alertThreshold} 
+                          onChange={(e) => setAlertThreshold(e.target.value)}
+                          className="w-full"
+                        />
+                      </div>
+                      
+                      <Button 
+                        className="w-full" 
+                        onClick={() => toast.success(`Alert settings saved (${alertType} at ${alertThreshold}%)`)}
+                      >
+                        Save Settings
+                      </Button>
+                    </div>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              )}
+            </div>
           </div>
+          
+          {alertsEnabled && alertedStocks.length > 0 && (
+            <Alert className="mb-4 bg-blue-50 dark:bg-blue-950/20 border-blue-200 dark:border-blue-800">
+              <Info className="h-4 w-4 text-blue-500" />
+              <AlertTitle className="text-blue-700 dark:text-blue-300">Alert Configuration</AlertTitle>
+              <AlertDescription className="text-blue-600 dark:text-blue-400">
+                You have set alerts for {alertedStocks.length} stocks. 
+                You will be notified when {alertType === 'price' ? 'price changes' : 
+                alertType === 'volume' ? 'volume spikes' : 'price movements'} exceed {alertThreshold}%.
+              </AlertDescription>
+            </Alert>
+          )}
           
           <div className="table-container overflow-x-auto">
             <table className="w-full border-collapse">
@@ -857,3 +947,4 @@ const Screener = () => {
 };
 
 export default Screener;
+
