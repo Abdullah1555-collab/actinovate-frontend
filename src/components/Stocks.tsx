@@ -1,9 +1,11 @@
-
 import React, { useState } from 'react';
-import { Search } from 'lucide-react';
+import { Search, ArrowLeft } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
 import StockDetail from './StockDetail';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { ChartContainer } from '@/components/ui/chart';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 // Mock stock data
 const stocksData = [
@@ -81,6 +83,15 @@ const stocksData = [
   }
 ];
 
+// Enhanced stock performance data for a more realistic chart
+const performanceData = [
+  { year: '2019', value: 100 },
+  { year: '2020', value: 120 },
+  { year: '2021', value: 180 },
+  { year: '2022', value: 150 },
+  { year: '2023', value: 200 },
+];
+
 const Stocks = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedStock, setSelectedStock] = useState(null);
@@ -109,64 +120,56 @@ const Stocks = () => {
 
   // Main stocks list view
   return (
-    <div className="animate-fadeIn space-y-6">
+    <div className="animate-fadeIn">
       <div className="mb-6">
-        <h1 className="text-3xl font-bold text-foreground">Stocks</h1>
+        <h1 className="text-3xl font-bold">Stocks</h1>
         <p className="text-muted-foreground mt-1">Track and analyze stocks</p>
       </div>
 
-      <Card className="p-6 bg-card border border-border shadow-sm">
-        <div className="relative mb-6">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground h-4 w-4" />
-          <Input
-            className="pl-10 bg-background text-foreground border-border"
-            placeholder="Search stocks..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-        </div>
+      <div className="relative mb-6">
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground h-4 w-4" />
+        <Input
+          className="pl-10"
+          placeholder="Search stocks..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+      </div>
 
-        <div className="rounded-lg overflow-hidden border border-border">
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-muted/50 border-b border-border">
-                <tr>
-                  <th className="px-4 py-3 text-left text-sm font-medium text-muted-foreground">Symbol</th>
-                  <th className="px-4 py-3 text-left text-sm font-medium text-muted-foreground">Name</th>
-                  <th className="px-4 py-3 text-right text-sm font-medium text-muted-foreground">Price</th>
-                  <th className="px-4 py-3 text-right text-sm font-medium text-muted-foreground">Change</th>
-                  <th className="px-4 py-3 text-right text-sm font-medium text-muted-foreground">Volume</th>
-                  <th className="px-4 py-3 text-right text-sm font-medium text-muted-foreground">Market Cap</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredStocks.map((stock) => (
-                  <tr
-                    key={stock.symbol}
-                    onClick={() => handleStockSelect(stock)}
-                    className="cursor-pointer hover:bg-muted/30 border-b border-border transition-colors"
-                  >
-                    <td className="px-4 py-4 font-medium text-foreground">{stock.symbol}</td>
-                    <td className="px-4 py-4 text-muted-foreground">{stock.name}</td>
-                    <td className="px-4 py-4 text-right text-foreground">${stock.price.toFixed(2)}</td>
-                    <td className={`px-4 py-4 text-right ${stock.change >= 0 ? 'text-green-500' : 'text-red-500'}`}>
-                      {stock.change >= 0 ? '+' : ''}{stock.change.toFixed(2)}
-                      {' '}
-                      ({stock.change >= 0 ? '+' : ''}{stock.changePercent.toFixed(2)}%)
-                    </td>
-                    <td className="px-4 py-4 text-right text-muted-foreground">{stock.volume}</td>
-                    <td className="px-4 py-4 text-right text-muted-foreground">{stock.marketCap}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-        
-        <div className="mt-4 text-sm text-muted-foreground">
-          Showing {filteredStocks.length} of {stocksData.length} stocks
-        </div>
-      </Card>
+      <div className="table-container overflow-x-auto">
+        <table className="stock-table w-full rounded-lg overflow-hidden">
+          <thead className="bg-muted/50 border-b border-border">
+            <tr>
+              <th className="px-4 py-3 text-left text-sm font-medium text-muted-foreground">Symbol</th>
+              <th className="px-4 py-3 text-left text-sm font-medium text-muted-foreground">Name</th>
+              <th className="px-4 py-3 text-right text-sm font-medium text-muted-foreground">Price</th>
+              <th className="px-4 py-3 text-right text-sm font-medium text-muted-foreground">Change</th>
+              <th className="px-4 py-3 text-right text-sm font-medium text-muted-foreground">Volume</th>
+              <th className="px-4 py-3 text-right text-sm font-medium text-muted-foreground">Market Cap</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filteredStocks.map((stock) => (
+              <tr
+                key={stock.symbol}
+                onClick={() => handleStockSelect(stock)}
+                className="cursor-pointer hover:bg-muted/50 border-b border-border transition-colors"
+              >
+                <td className="px-4 py-4 font-medium">{stock.symbol}</td>
+                <td className="px-4 py-4 text-muted-foreground">{stock.name}</td>
+                <td className="px-4 py-4 text-right">${stock.price.toFixed(2)}</td>
+                <td className={`px-4 py-4 text-right ${stock.change >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                  {stock.change >= 0 ? '+' : ''}{stock.change.toFixed(2)}
+                  {' '}
+                  ({stock.change >= 0 ? '+' : ''}{stock.changePercent.toFixed(2)}%)
+                </td>
+                <td className="px-4 py-4 text-right text-muted-foreground">{stock.volume}</td>
+                <td className="px-4 py-4 text-right text-muted-foreground">{stock.marketCap}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };
