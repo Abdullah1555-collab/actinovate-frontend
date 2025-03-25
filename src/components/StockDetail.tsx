@@ -20,7 +20,7 @@ interface StockDetailProps {
 
 const StockDetail: React.FC<StockDetailProps> = ({ stock, onBack }) => {
   return (
-    <div className="space-y-4 animate-fadeIn">
+    <div className="space-y-6 animate-fadeIn">
       <StockHeader stock={stock} onBack={onBack} />
 
       <Tabs defaultValue="chart" className="w-full">

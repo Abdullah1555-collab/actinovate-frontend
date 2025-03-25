@@ -20,7 +20,7 @@ const technicalData = {
 
 const TechnicalData: React.FC = () => {
   return (
-    <div className="p-6 bg-card rounded-lg border border-border">
+    <div className="p-6 bg-card rounded-lg border border-border shadow-sm">
       <h3 className="text-xl font-bold mb-6 text-foreground">Technical Indicators</h3>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-x-12 gap-y-6">
         <div>

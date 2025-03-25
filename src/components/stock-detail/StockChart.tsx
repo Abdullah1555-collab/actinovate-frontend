@@ -14,8 +14,8 @@ const performanceData = [
 const StockChart: React.FC = () => {
   return (
     <div className="space-y-8">
-      <div className="p-6 bg-white rounded-lg border border-gray-100">
-        <h3 className="text-xl font-bold mb-6">5 Year Performance</h3>
+      <div className="p-6 bg-card rounded-lg border border-border shadow-sm">
+        <h3 className="text-xl font-bold mb-6 text-foreground">5 Year Performance</h3>
         <div className="h-[400px] w-full">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={performanceData} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
@@ -24,21 +24,32 @@ const StockChart: React.FC = () => {
                 dataKey="year" 
                 axisLine={false}
                 tickLine={false}
+                tick={{ fill: 'var(--foreground)' }}
                 ticks={['2019', '2020', '2021', '2022', '2023']}
               />
               <YAxis 
                 axisLine={false} 
                 tickLine={false}
+                tick={{ fill: 'var(--foreground)' }}
                 domain={[0, 'dataMax + 20']}
                 ticks={[0, 50, 100, 150, 200]}
               />
-              <Tooltip formatter={(value) => [`${value}`, 'Value']} />
+              <Tooltip 
+                formatter={(value) => [`${value}`, 'Value']} 
+                contentStyle={{
+                  backgroundColor: 'var(--card)',
+                  borderColor: 'var(--border)',
+                  color: 'var(--foreground)'
+                }}
+                labelStyle={{ color: 'var(--foreground)' }}
+                itemStyle={{ color: 'var(--foreground)' }}
+              />
               <Line 
                 type="monotone" 
                 dataKey="value" 
-                stroke="#2563eb" 
+                stroke="#3b82f6" 
                 strokeWidth={2} 
-                dot={{ r: 4, fill: "#2563eb", strokeWidth: 0 }}
+                dot={{ r: 4, fill: "#3b82f6", strokeWidth: 0 }}
                 activeDot={{ r: 8 }}
               />
             </LineChart>
@@ -47,8 +58,8 @@ const StockChart: React.FC = () => {
       </div>
 
       {/* Volume Bar Chart */}
-      <div className="p-6 bg-white rounded-lg border border-gray-100">
-        <h3 className="text-xl font-bold mb-6">Trading Volume</h3>
+      <div className="p-6 bg-card rounded-lg border border-border shadow-sm">
+        <h3 className="text-xl font-bold mb-6 text-foreground">Trading Volume</h3>
         <div className="h-[250px] w-full">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={performanceData} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
@@ -57,17 +68,28 @@ const StockChart: React.FC = () => {
                 dataKey="year" 
                 axisLine={false}
                 tickLine={false}
+                tick={{ fill: 'var(--foreground)' }}
                 ticks={['2019', '2020', '2021', '2022', '2023']}
               />
               <YAxis 
                 axisLine={false} 
                 tickLine={false}
+                tick={{ fill: 'var(--foreground)' }}
                 domain={[0, 'dataMax + 500']}
               />
-              <Tooltip formatter={(value) => [`${value}`, 'Volume']} />
+              <Tooltip 
+                formatter={(value) => [`${value}`, 'Volume']} 
+                contentStyle={{
+                  backgroundColor: 'var(--card)',
+                  borderColor: 'var(--border)',
+                  color: 'var(--foreground)'
+                }}
+                labelStyle={{ color: 'var(--foreground)' }}
+                itemStyle={{ color: 'var(--foreground)' }}
+              />
               <Bar 
                 dataKey="volume" 
-                fill="#4f46e5" 
+                fill="#8b5cf6" 
                 radius={[4, 4, 0, 0]}
               />
             </BarChart>
