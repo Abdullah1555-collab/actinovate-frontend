@@ -52,7 +52,7 @@ const StockChart: React.FC = () => {
       <div className="p-6 bg-card rounded-lg border border-border shadow-sm">
         <div className="h-[400px] w-full">
           <ResponsiveContainer width="100%" height="100%">
-            {chartType === 'line' && (
+            {chartType === 'line' ? (
               <LineChart data={performanceData} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
                 <defs>
                   <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
@@ -104,9 +104,7 @@ const StockChart: React.FC = () => {
                   activeDot={{ r: 8, fill: "#82ca9d" }}
                 />
               </LineChart>
-            )}
-            
-            {chartType === 'area' && (
+            ) : chartType === 'area' ? (
               <AreaChart data={performanceData} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
                 <defs>
                   <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
@@ -157,9 +155,7 @@ const StockChart: React.FC = () => {
                   fill="url(#colorProfit)" 
                 />
               </AreaChart>
-            )}
-            
-            {chartType === 'composed' && (
+            ) : (
               <ComposedChart data={performanceData} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
                 <defs>
                   <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
