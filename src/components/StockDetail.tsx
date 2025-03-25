@@ -24,11 +24,11 @@ const StockDetail: React.FC<StockDetailProps> = ({ stock, onBack }) => {
       <StockHeader stock={stock} onBack={onBack} />
 
       <Tabs defaultValue="chart" className="w-full">
-        <TabsList className="mb-6 p-1 bg-muted/50 inline-flex rounded-md border border-border">
-          <TabsTrigger value="chart" className="rounded-md text-foreground">Chart</TabsTrigger>
-          <TabsTrigger value="financial" className="rounded-md text-foreground">Financial</TabsTrigger>
-          <TabsTrigger value="technical" className="rounded-md text-foreground">Technical</TabsTrigger>
-          <TabsTrigger value="news" className="rounded-md text-foreground">News</TabsTrigger>
+        <TabsList className="mb-6 p-1 bg-card inline-flex rounded-md border border-border">
+          <TabsTrigger value="chart" className="rounded-md text-foreground data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Chart</TabsTrigger>
+          <TabsTrigger value="financial" className="rounded-md text-foreground data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Financial</TabsTrigger>
+          <TabsTrigger value="technical" className="rounded-md text-foreground data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Technical</TabsTrigger>
+          <TabsTrigger value="news" className="rounded-md text-foreground data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">News</TabsTrigger>
         </TabsList>
         
         <TabsContent value="chart" className="block">

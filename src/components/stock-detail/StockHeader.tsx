@@ -24,17 +24,17 @@ const StockHeader: React.FC<StockHeaderProps> = ({ stock, onBack }) => {
   };
 
   return (
-    <div className="flex items-center mb-6">
+    <div className="flex items-center mb-6 p-6 bg-card rounded-lg border border-border shadow-sm">
       <button 
         onClick={onBack}
-        className="mr-4 p-1 text-muted-foreground hover:text-foreground transition-colors"
+        className="mr-4 p-2 rounded-full bg-secondary text-muted-foreground hover:text-foreground hover:bg-secondary/80 transition-colors"
         aria-label="Go back"
       >
         <ArrowLeft size={20} />
       </button>
       
       <div className="mr-4">
-        <div className="w-12 h-12 bg-secondary flex items-center justify-center text-foreground font-semibold rounded-md">
+        <div className="w-14 h-14 bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center text-white font-semibold rounded-md">
           {stock.symbol.substring(0, 1)}
         </div>
       </div>
@@ -46,7 +46,7 @@ const StockHeader: React.FC<StockHeaderProps> = ({ stock, onBack }) => {
       
       <div className="ml-auto text-right">
         <div className="text-3xl font-bold text-foreground">{formatCurrency(stock.price)}</div>
-        <div className={`${stock.changePercent >= 0 ? 'text-green-500' : 'text-red-500'} text-sm font-medium`}>
+        <div className={`${stock.changePercent >= 0 ? 'text-green-500' : 'text-red-500'} text-sm font-medium px-2 py-1 rounded-md ${stock.changePercent >= 0 ? 'bg-green-500/10' : 'bg-red-500/10'} inline-block`}>
           {stock.change >= 0 ? '+' : ''}{stock.change.toFixed(2)} ({stock.changePercent >= 0 ? '+' : ''}{stock.changePercent.toFixed(2)}%)
         </div>
       </div>
