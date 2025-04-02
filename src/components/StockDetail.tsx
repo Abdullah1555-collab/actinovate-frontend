@@ -24,7 +24,7 @@ const StockDetail: React.FC<StockDetailProps> = ({ stock, onBack }) => {
       <StockHeader stock={stock} onBack={onBack} />
 
       <Tabs defaultValue="chart">
-        <TabsList className="mb-6 p-1 bg-gray-50 inline-flex rounded-md border border-gray-100">
+        <TabsList className="mb-6 p-1 bg-gray-50 dark:bg-slate-900 inline-flex rounded-md border border-gray-100 dark:border-slate-700">
           <TabsTrigger value="chart" className="rounded-md">Chart</TabsTrigger>
           <TabsTrigger value="financial" className="rounded-md">Financial</TabsTrigger>
           <TabsTrigger value="technical" className="rounded-md">Technical</TabsTrigger>
