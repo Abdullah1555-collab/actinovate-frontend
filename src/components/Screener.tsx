@@ -204,6 +204,7 @@ const Screener = () => {
   const [alertsEnabled, setAlertsEnabled] = useState(false);
   const [alertType, setAlertType] = useState<'price' | 'volume' | 'movement'>('price');
   const [alertThreshold, setAlertThreshold] = useState('5');
+  const [alertFrequency, setAlertFrequency] = useState<'realtime' | 'daily' | 'weekly'>('realtime');
   
   // Filter states
   const [filters, setFilters] = useState({
@@ -400,7 +401,7 @@ const Screener = () => {
       toast.success(`Alert removed for ${symbol}`);
     } else {
       setAlertedStocks([...alertedStocks, symbol]);
-      toast.success(`Alert set for ${symbol}`);
+      toast.success(`Alert set for ${symbol} (${alertFrequency} frequency)`);
     }
   };
   
@@ -808,9 +809,31 @@ const Screener = () => {
                         />
                       </div>
                       
+                      <div>
+                        <h4 className="font-medium mb-2">Frequency</h4>
+                        <RadioGroup 
+                          value={alertFrequency} 
+                          onValueChange={(value) => setAlertFrequency(value as 'realtime' | 'daily' | 'weekly')}
+                          className="flex flex-col gap-2"
+                        >
+                          <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="realtime" id="alert-realtime" />
+                            <label htmlFor="alert-realtime" className="text-sm">Real-time</label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="daily" id="alert-daily" />
+                            <label htmlFor="alert-daily" className="text-sm">Daily</label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="weekly" id="alert-weekly" />
+                            <label htmlFor="alert-weekly" className="text-sm">Weekly</label>
+                          </div>
+                        </RadioGroup>
+                      </div>
+                      
                       <Button 
                         className="w-full" 
-                        onClick={() => toast.success(`Alert settings saved (${alertType} at ${alertThreshold}%)`)}
+                        onClick={() => toast.success(`Alert settings saved (${alertType} at ${alertThreshold}%, ${alertFrequency} frequency)`)}
                       >
                         Save Settings
                       </Button>
@@ -827,7 +850,8 @@ const Screener = () => {
               <AlertTitle className="text-blue-700 dark:text-blue-300">Alert Configuration</AlertTitle>
               <AlertDescription className="text-blue-600 dark:text-blue-400">
                 You have set alerts for {alertedStocks.length} stocks. 
-                You will be notified when {alertType === 'price' ? 'price changes' : 
+                You will be notified {alertFrequency === 'realtime' ? 'in real-time' : 
+                alertFrequency === 'daily' ? 'daily' : 'weekly'} when {alertType === 'price' ? 'price changes' : 
                 alertType === 'volume' ? 'volume spikes' : 'price movements'} exceed {alertThreshold}%.
               </AlertDescription>
             </Alert>
@@ -947,4 +971,3 @@ const Screener = () => {
 };
 
 export default Screener;
-
